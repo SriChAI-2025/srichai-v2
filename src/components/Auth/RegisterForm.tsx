@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { User, Mail, Lock, UserPlus, Eye, EyeOff, Zap } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { GraduationCap, Eye, EyeOff, Zap } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface RegisterFormProps {
@@ -15,8 +16,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleMode }) => {
     confirmPassword: ''
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const { register } = useAuth();
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading] = useState(false);
+  const { } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({

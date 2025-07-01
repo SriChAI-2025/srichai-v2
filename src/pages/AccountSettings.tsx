@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { 
-  Settings, 
   Bell, 
+  Globe, 
   Shield, 
-  Palette, 
-  Zap,
   Save,
   Eye,
   EyeOff
@@ -167,7 +165,7 @@ const AccountSettings: React.FC = () => {
           <div className="neo-card">
             <div className="bg-orange-500 text-white p-6 border-b-4 border-black">
               <h3 className="text-2xl font-black uppercase tracking-wider flex items-center space-x-3">
-                <Palette className="h-6 w-6" />
+                <Globe className="h-6 w-6" />
                 <span>PREFERENCES</span>
               </h3>
             </div>

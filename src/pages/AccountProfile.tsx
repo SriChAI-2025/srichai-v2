@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { 
   User, 
-  Mail, 
+  Camera, 
   Save, 
   Edit,
-  Camera,
   Shield,
   Zap
 } from 'lucide-react';

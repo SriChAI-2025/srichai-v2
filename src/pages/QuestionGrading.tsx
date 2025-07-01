@@ -10,28 +10,14 @@ import {
   Zap,
   Image as ImageIcon,
   ZoomIn,
-  X
+  X,
+  Download,
+  Eye
 } from 'lucide-react';
 import Layout from '../components/Layout/Layout';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
 import { mockExams, MockQuestion, MockAnswer, updateExamStats } from '../data/mockData';
 import toast from 'react-hot-toast';
-
-// Helper function to determine section type and max score
-const getSectionInfo = (question: MockQuestion) => {
-  // Find the exam and section to determine the scoring limits
-  for (const exam of mockExams) {
-    for (const section of exam.sections) {
-      if (section._id === question.sectionId) {
-        return {
-          sectionTitle: section.title,
-          maxScore: question.maxScore
-        };
-      }
-    }
-  }
-  return { sectionTitle: '', maxScore: question.maxScore };
-};
 
 const QuestionGrading: React.FC = () => {
   const { questionId } = useParams<{ questionId: string }>();
@@ -93,7 +79,6 @@ const QuestionGrading: React.FC = () => {
   const generateAIScore = (answer: MockAnswer) => {
     if (!question) return;
 
-    const sectionInfo = getSectionInfo(question);
     const maxScore = question.maxScore;
     
     // Generate AI score that respects the maximum score for the section

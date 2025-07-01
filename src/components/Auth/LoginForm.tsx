@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { User, Lock, LogIn, Eye, EyeOff, Zap } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { GraduationCap, Eye, EyeOff, Zap } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface LoginFormProps {

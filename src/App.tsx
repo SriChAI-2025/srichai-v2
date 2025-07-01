@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
 import AuthPage from './pages/AuthPage';
 import Dashboard from './pages/Dashboard';
 import ExamList from './pages/ExamList';
@@ -10,7 +10,6 @@ import ExamDetail from './pages/ExamDetail';
 import QuestionGrading from './pages/QuestionGrading';
 import AccountProfile from './pages/AccountProfile';
 import AccountSettings from './pages/AccountSettings';
-import LoadingSpinner from './components/UI/LoadingSpinner';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Bypass authentication - always allow access

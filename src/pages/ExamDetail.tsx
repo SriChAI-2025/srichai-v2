@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import Layout from '../components/Layout/Layout';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
-import { mockExams, MockExam, createMockQuestion, updateExamStats } from '../data/mockData';
+import { mockExams, MockExam, updateExamStats } from '../data/mockData';
 
 const ExamDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();

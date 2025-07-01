@@ -4,7 +4,6 @@ import {
   FileText, 
   Users, 
   CheckCircle, 
-  Clock, 
   Plus,
   BarChart3,
   TrendingUp,

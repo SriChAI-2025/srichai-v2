@@ -152,7 +152,7 @@ const getPhysicsImageForSection = (examId: string, sectionId: string) => {
 
 // Generate answers for a question
 const generateAnswersForQuestion = (examId: string, questionId: string, studentIds: string[], sectionId?: string) => {
-  return studentIds.map((studentId, index) => {
+  return studentIds.map((studentId) => {
     const isGraded = Math.random() > 0.4; // 60% chance of being graded
     const answer: MockAnswer = {
       _id: `a_${questionId}_${studentId}`,
@@ -213,6 +213,7 @@ export const mockExams: MockExam[] = [
     _id: 'exam1',
     title: 'Physics Midterm 2024',
     description: 'Comprehensive physics examination covering mechanics, thermodynamics, and wave motion',
+    examCode: 'PHYS2024MID',
     createdAt: '2024-01-15T10:00:00Z',
     status: 'active',
     sections: [
@@ -226,6 +227,7 @@ export const mockExams: MockExam[] = [
             _id: 'q1_a1',
             examId: 'exam1',
             sectionId: 'section1',
+            questionCode: 'Q1A',
             promptText: 'Define Newton\'s First Law of Motion and provide one real-world example.',
             modelAnswer: 'Newton\'s First Law states that an object at rest stays at rest and an object in motion stays in motion unless acted upon by an external force. Example: A book on a table remains stationary until pushed.',
             referenceMaterial: 'Textbook Chapter 2, pages 45-52',
@@ -241,6 +243,7 @@ export const mockExams: MockExam[] = [
             _id: 'q1_a2',
             examId: 'exam1',
             sectionId: 'section1',
+            questionCode: 'Q2A',
             promptText: 'What is the difference between speed and velocity?',
             modelAnswer: 'Speed is a scalar quantity representing how fast an object moves. Velocity is a vector quantity that includes both speed and direction.',
             referenceMaterial: 'Textbook Chapter 1, pages 15-20',
@@ -256,6 +259,7 @@ export const mockExams: MockExam[] = [
             _id: 'q1_a3',
             examId: 'exam1',
             sectionId: 'section1',
+            questionCode: 'Q3A',
             promptText: 'Define acceleration and state its SI unit.',
             modelAnswer: 'Acceleration is the rate of change of velocity with respect to time. Its SI unit is meters per second squared (m/s²).',
             referenceMaterial: 'Textbook Chapter 1, pages 25-30',
@@ -271,6 +275,7 @@ export const mockExams: MockExam[] = [
             _id: 'q1_a4',
             examId: 'exam1',
             sectionId: 'section1',
+            questionCode: 'Q4A',
             promptText: 'What is the principle of conservation of energy?',
             modelAnswer: 'Energy cannot be created or destroyed, only transformed from one form to another. The total energy in an isolated system remains constant.',
             referenceMaterial: 'Textbook Chapter 5, pages 95-100',
@@ -286,6 +291,7 @@ export const mockExams: MockExam[] = [
             _id: 'q1_a5',
             examId: 'exam1',
             sectionId: 'section1',
+            questionCode: 'Q5A',
             promptText: 'Define frequency and wavelength of a wave.',
             modelAnswer: 'Frequency is the number of complete oscillations per unit time (Hz). Wavelength is the distance between two consecutive points in phase on a wave (meters).',
             referenceMaterial: 'Textbook Chapter 7, pages 140-145',
@@ -309,6 +315,7 @@ export const mockExams: MockExam[] = [
             _id: 'q1_b1',
             examId: 'exam1',
             sectionId: 'section2',
+            questionCode: 'Q1B',
             promptText: 'Explain the three laws of thermodynamics with practical applications.',
             modelAnswer: 'First Law: Energy cannot be created or destroyed (conservation of energy) - used in heat engines. Second Law: Entropy of isolated systems increases - explains why heat flows from hot to cold. Third Law: Entropy approaches zero as temperature approaches absolute zero - used in cryogenics.',
             referenceMaterial: 'Textbook Chapter 6, pages 110-130',
@@ -324,6 +331,7 @@ export const mockExams: MockExam[] = [
             _id: 'q1_b2',
             examId: 'exam1',
             sectionId: 'section2',
+            questionCode: 'Q2B',
             promptText: 'Describe the photoelectric effect and its significance in quantum physics.',
             modelAnswer: 'The photoelectric effect occurs when electrons are emitted from a material surface when light hits it. Einstein explained this using quantum theory, showing light behaves as particles (photons). This led to the development of quantum mechanics and has applications in solar cells and photodiodes.',
             referenceMaterial: 'Textbook Chapter 8, pages 160-175',
@@ -339,6 +347,7 @@ export const mockExams: MockExam[] = [
             _id: 'q1_b3',
             examId: 'exam1',
             sectionId: 'section2',
+            questionCode: 'Q3B',
             promptText: 'Explain electromagnetic induction and Faraday\'s law with applications.',
             modelAnswer: 'Electromagnetic induction is the production of EMF when magnetic flux through a conductor changes. Faraday\'s law states EMF = -dΦ/dt. Applications include generators, transformers, and induction motors.',
             referenceMaterial: 'Textbook Chapter 9, pages 180-200',
@@ -354,6 +363,7 @@ export const mockExams: MockExam[] = [
             _id: 'q1_b4',
             examId: 'exam1',
             sectionId: 'section2',
+            questionCode: 'Q4B',
             promptText: 'Discuss the wave-particle duality of light with experimental evidence.',
             modelAnswer: 'Light exhibits both wave and particle properties. Wave nature: interference, diffraction (Young\'s double slit). Particle nature: photoelectric effect, Compton scattering. This duality is fundamental to quantum mechanics.',
             referenceMaterial: 'Textbook Chapter 8, pages 155-180',
@@ -369,6 +379,7 @@ export const mockExams: MockExam[] = [
             _id: 'q1_b5',
             examId: 'exam1',
             sectionId: 'section2',
+            questionCode: 'Q5B',
             promptText: 'Explain the concept of electric field and its relationship with electric potential.',
             modelAnswer: 'Electric field is the force per unit charge at a point in space (E = F/q). Electric potential is the work done per unit charge to bring a charge from infinity (V = W/q). Relationship: E = -dV/dr (field is negative gradient of potential).',
             referenceMaterial: 'Textbook Chapter 4, pages 70-90',
@@ -392,6 +403,7 @@ export const mockExams: MockExam[] = [
             _id: 'q1_c1',
             examId: 'exam1',
             sectionId: 'section3',
+            questionCode: 'Q1C',
             promptText: 'A 5kg object is pushed with a force of 20N. If the coefficient of friction is 0.3, calculate the acceleration. (g = 9.8 m/s²)',
             modelAnswer: 'Given: m = 5kg, F = 20N, μ = 0.3, g = 9.8 m/s²\nStep 1: Calculate friction force: f = μ × N = μ × mg = 0.3 × 5 × 9.8 = 14.7N\nStep 2: Calculate net force: F_net = F_applied - f = 20 - 14.7 = 5.3N\nStep 3: Calculate acceleration: a = F_net/m = 5.3/5 = 1.06 m/s²',
             referenceMaterial: 'Textbook Chapter 3, Newton\'s Laws and Friction',
@@ -407,6 +419,7 @@ export const mockExams: MockExam[] = [
             _id: 'q1_c2',
             examId: 'exam1',
             sectionId: 'section3',
+            questionCode: 'Q2C',
             promptText: 'A projectile is launched at 30° with initial velocity 50 m/s. Find maximum height and range. (g = 9.8 m/s²)',
             modelAnswer: 'Given: v₀ = 50 m/s, θ = 30°, g = 9.8 m/s²\nv₀ₓ = v₀cos30° = 50 × 0.866 = 43.3 m/s\nv₀ᵧ = v₀sin30° = 50 × 0.5 = 25 m/s\nMax height: H = v₀ᵧ²/(2g) = 25²/(2×9.8) = 31.9 m\nRange: R = v₀²sin(2θ)/g = 50²sin(60°)/9.8 = 220.4 m',
             referenceMaterial: 'Textbook Chapter 2, Projectile Motion',
@@ -422,6 +435,7 @@ export const mockExams: MockExam[] = [
             _id: 'q1_c3',
             examId: 'exam1',
             sectionId: 'section3',
+            questionCode: 'Q3C',
             promptText: 'Calculate the electric field at a point 2m from a 5μC point charge. Also find the potential at this point.',
             modelAnswer: 'Given: q = 5μC = 5×10⁻⁶ C, r = 2m, k = 9×10⁹ Nm²/C²\nElectric field: E = kq/r² = (9×10⁹ × 5×10⁻⁶)/2² = 11,250 N/C\nElectric potential: V = kq/r = (9×10⁹ × 5×10⁻⁶)/2 = 22,500 V',
             referenceMaterial: 'Textbook Chapter 4, Electric Fields and Potential',
@@ -437,6 +451,7 @@ export const mockExams: MockExam[] = [
             _id: 'q1_c4',
             examId: 'exam1',
             sectionId: 'section3',
+            questionCode: 'Q4C',
             promptText: 'A spring with spring constant 200 N/m is compressed by 0.1m. Calculate the elastic potential energy and the speed of a 0.5kg mass when released.',
             modelAnswer: 'Given: k = 200 N/m, x = 0.1m, m = 0.5kg\nElastic PE: U = ½kx² = ½ × 200 × (0.1)² = 1 J\nUsing conservation of energy: U = KE\n½kx² = ½mv²\nv = √(kx²/m) = √(200 × 0.01/0.5) = √4 = 2 m/s',
             referenceMaterial: 'Textbook Chapter 5, Energy and Springs',
@@ -452,6 +467,7 @@ export const mockExams: MockExam[] = [
             _id: 'q1_c5',
             examId: 'exam1',
             sectionId: 'section3',
+            questionCode: 'Q5C',
             promptText: 'A wave has frequency 50 Hz and wavelength 4m. Calculate its speed. If this wave enters a medium where its speed becomes 150 m/s, find the new wavelength.',
             modelAnswer: 'Given: f = 50 Hz, λ₁ = 4m, v₂ = 150 m/s\nWave speed: v₁ = fλ₁ = 50 × 4 = 200 m/s\nFrequency remains constant when entering new medium\nNew wavelength: λ₂ = v₂/f = 150/50 = 3 m',
             referenceMaterial: 'Textbook Chapter 7, Wave Properties',
@@ -494,6 +510,11 @@ export const mockExams: MockExam[] = [
             questionCode: 'Q1A',
             promptText: 'Define the derivative of a function.',
             modelAnswer: 'The derivative of a function f(x) at a point is the limit of the rate of change of the function as the interval approaches zero. It represents the slope of the tangent line at that point.',
+            referenceMaterial: 'Calculus Textbook Chapter 3, pages 45-52',
+            exampleResponses: [
+              { text: 'Rate of change of function at a point.', score: 1 },
+              { text: 'Limit of rate of change as interval approaches zero, represents tangent slope.', score: 2 }
+            ],
             maxScore: 2,
             order: 0,
             answers: []
@@ -505,6 +526,11 @@ export const mockExams: MockExam[] = [
             questionCode: 'Q2A',
             promptText: 'What is the Pythagorean theorem?',
             modelAnswer: 'In a right triangle, the square of the hypotenuse equals the sum of squares of the other two sides: a² + b² = c².',
+            referenceMaterial: 'Geometry Textbook Chapter 5, pages 80-85',
+            exampleResponses: [
+              { text: 'a² + b² = c² for right triangles.', score: 2 },
+              { text: 'Sum of squares equals hypotenuse squared.', score: 1 }
+            ],
             maxScore: 2,
             order: 1,
             answers: []
@@ -516,6 +542,11 @@ export const mockExams: MockExam[] = [
             questionCode: 'Q3A',
             promptText: 'Define a prime number.',
             modelAnswer: 'A prime number is a natural number greater than 1 that has no positive divisors other than 1 and itself.',
+            referenceMaterial: 'Number Theory Chapter 1, pages 15-20',
+            exampleResponses: [
+              { text: 'Number divisible only by 1 and itself.', score: 1 },
+              { text: 'Natural number > 1 with only divisors 1 and itself.', score: 2 }
+            ],
             maxScore: 2,
             order: 2,
             answers: []
@@ -527,6 +558,11 @@ export const mockExams: MockExam[] = [
             questionCode: 'Q4A',
             promptText: 'What is the quadratic formula?',
             modelAnswer: 'For equation ax² + bx + c = 0, the solutions are x = (-b ± √(b² - 4ac)) / 2a.',
+            referenceMaterial: 'Algebra Textbook Chapter 4, pages 60-65',
+            exampleResponses: [
+              { text: 'x = (-b ± √(b² - 4ac)) / 2a', score: 2 },
+              { text: 'Formula to solve ax² + bx + c = 0.', score: 1 }
+            ],
             maxScore: 2,
             order: 3,
             answers: []
@@ -538,6 +574,11 @@ export const mockExams: MockExam[] = [
             questionCode: 'Q5A',
             promptText: 'Define the area of a circle.',
             modelAnswer: 'The area of a circle with radius r is A = πr².',
+            referenceMaterial: 'Geometry Textbook Chapter 6, pages 90-95',
+            exampleResponses: [
+              { text: 'A = πr²', score: 2 },
+              { text: 'Pi times radius squared.', score: 1 }
+            ],
             maxScore: 2,
             order: 4,
             answers: []
@@ -557,6 +598,11 @@ export const mockExams: MockExam[] = [
             questionCode: 'Q1B',
             promptText: 'Explain the fundamental theorem of calculus.',
             modelAnswer: 'The fundamental theorem connects differentiation and integration. Part 1: If F(x) = ∫f(t)dt from a to x, then F\'(x) = f(x). Part 2: ∫f(x)dx from a to b = F(b) - F(a) where F\'(x) = f(x).',
+            referenceMaterial: 'Calculus Textbook Chapter 8, pages 150-165',
+            exampleResponses: [
+              { text: 'Connects derivatives and integrals.', score: 2 },
+              { text: 'Complete explanation with both parts and applications.', score: 5 }
+            ],
             maxScore: 5,
             order: 0,
             answers: []
@@ -568,6 +614,11 @@ export const mockExams: MockExam[] = [
             questionCode: 'Q2B',
             promptText: 'Describe the properties of logarithms.',
             modelAnswer: 'Key properties: log(ab) = log(a) + log(b), log(a/b) = log(a) - log(b), log(aⁿ) = n·log(a), log_a(a) = 1, log_a(1) = 0.',
+            referenceMaterial: 'Algebra Textbook Chapter 7, pages 120-130',
+            exampleResponses: [
+              { text: 'Basic log properties listed.', score: 3 },
+              { text: 'Complete properties with examples and derivations.', score: 5 }
+            ],
             maxScore: 5,
             order: 1,
             answers: []
@@ -579,6 +630,11 @@ export const mockExams: MockExam[] = [
             questionCode: 'Q3B',
             promptText: 'Explain matrix multiplication and its properties.',
             modelAnswer: 'Matrix multiplication: (AB)ij = Σ(Aik × Bkj). Properties: not commutative (AB ≠ BA), associative ((AB)C = A(BC)), distributive (A(B+C) = AB + AC).',
+            referenceMaterial: 'Linear Algebra Textbook Chapter 3, pages 50-70',
+            exampleResponses: [
+              { text: 'Basic multiplication rule and some properties.', score: 3 },
+              { text: 'Complete explanation with all properties and examples.', score: 5 }
+            ],
             maxScore: 5,
             order: 2,
             answers: []
@@ -590,6 +646,11 @@ export const mockExams: MockExam[] = [
             questionCode: 'Q4B',
             promptText: 'Describe the binomial theorem.',
             modelAnswer: '(a + b)ⁿ = Σ(nCk × aⁿ⁻ᵏ × bᵏ) for k = 0 to n, where nCk = n!/(k!(n-k)!) is the binomial coefficient.',
+            referenceMaterial: 'Algebra Textbook Chapter 9, pages 180-190',
+            exampleResponses: [
+              { text: 'Expansion formula for (a + b)^n.', score: 3 },
+              { text: 'Complete theorem with binomial coefficients and examples.', score: 5 }
+            ],
             maxScore: 5,
             order: 3,
             answers: []
@@ -601,6 +662,11 @@ export const mockExams: MockExam[] = [
             questionCode: 'Q5B',
             promptText: 'Explain the concept of limits in calculus.',
             modelAnswer: 'A limit describes the value a function approaches as the input approaches a certain value. Formally: lim(x→a) f(x) = L if for every ε > 0, there exists δ > 0 such that |f(x) - L| < ε when 0 < |x - a| < δ.',
+            referenceMaterial: 'Calculus Textbook Chapter 2, pages 25-40',
+            exampleResponses: [
+              { text: 'Value function approaches at a point.', score: 2 },
+              { text: 'Formal definition with epsilon-delta and examples.', score: 5 }
+            ],
             maxScore: 5,
             order: 4,
             answers: []
@@ -620,6 +686,11 @@ export const mockExams: MockExam[] = [
             questionCode: 'Q1C',
             promptText: 'Find the area under the curve y = x² from x = 0 to x = 3 using integration.',
             modelAnswer: 'Area = ∫₀³ x² dx = [x³/3]₀³ = (3³/3) - (0³/3) = 27/3 - 0 = 9 square units.',
+            referenceMaterial: 'Calculus Textbook Chapter 8, Integration Applications',
+            exampleResponses: [
+              { text: 'Basic integration formula without proper limits.', score: 5 },
+              { text: 'Complete solution with proper integration and evaluation.', score: 10 }
+            ],
             maxScore: 10,
             order: 0,
             answers: []
@@ -631,6 +702,11 @@ export const mockExams: MockExam[] = [
             questionCode: 'Q2C',
             promptText: 'Solve the system of equations: 2x + 3y = 7, 4x - y = 1 using substitution method.',
             modelAnswer: 'From equation 2: y = 4x - 1. Substitute into equation 1: 2x + 3(4x - 1) = 7, 2x + 12x - 3 = 7, 14x = 10, x = 5/7. Then y = 4(5/7) - 1 = 20/7 - 7/7 = 13/7. Solution: x = 5/7, y = 13/7.',
+            referenceMaterial: 'Algebra Textbook Chapter 5, Systems of Equations',
+            exampleResponses: [
+              { text: 'Basic substitution without complete solution.', score: 5 },
+              { text: 'Complete solution with verification and correct answers.', score: 10 }
+            ],
             maxScore: 10,
             order: 1,
             answers: []
@@ -642,6 +718,11 @@ export const mockExams: MockExam[] = [
             questionCode: 'Q3C',
             promptText: 'Find the maximum and minimum values of f(x) = x³ - 6x² + 9x + 1 on the interval [0, 4].',
             modelAnswer: 'f\'(x) = 3x² - 12x + 9 = 3(x² - 4x + 3) = 3(x - 1)(x - 3). Critical points: x = 1, 3. f(0) = 1, f(1) = 5, f(3) = 1, f(4) = 5. Maximum: 5 at x = 1 and x = 4. Minimum: 1 at x = 0 and x = 3.',
+            referenceMaterial: 'Calculus Textbook Chapter 4, Optimization',
+            exampleResponses: [
+              { text: 'Basic derivative calculation without critical point analysis.', score: 5 },
+              { text: 'Complete optimization with critical points and endpoint evaluation.', score: 10 }
+            ],
             maxScore: 10,
             order: 2,
             answers: []
@@ -653,6 +734,11 @@ export const mockExams: MockExam[] = [
             questionCode: 'Q4C',
             promptText: 'Prove that the sum of first n natural numbers is n(n+1)/2 using mathematical induction.',
             modelAnswer: 'Base case: n = 1, sum = 1 = 1(1+1)/2 = 1 ✓. Inductive step: Assume true for n = k, i.e., 1+2+...+k = k(k+1)/2. For n = k+1: 1+2+...+k+(k+1) = k(k+1)/2 + (k+1) = (k+1)(k/2 + 1) = (k+1)(k+2)/2. Thus true for all n ≥ 1.',
+            referenceMaterial: 'Discrete Math Textbook Chapter 3, Mathematical Induction',
+            exampleResponses: [
+              { text: 'Basic induction structure without complete proof.', score: 5 },
+              { text: 'Complete inductive proof with base case and inductive step.', score: 10 }
+            ],
             maxScore: 10,
             order: 3,
             answers: []
@@ -664,6 +750,11 @@ export const mockExams: MockExam[] = [
             questionCode: 'Q5C',
             promptText: 'Find the equation of the tangent line to the curve y = e^x at the point where x = ln(2).',
             modelAnswer: 'At x = ln(2): y = e^(ln(2)) = 2. Point: (ln(2), 2). dy/dx = e^x, so slope at x = ln(2) is e^(ln(2)) = 2. Tangent line: y - 2 = 2(x - ln(2)), y = 2x - 2ln(2) + 2.',
+            referenceMaterial: 'Calculus Textbook Chapter 3, Derivatives and Tangent Lines',
+            exampleResponses: [
+              { text: 'Basic tangent line formula without proper calculation.', score: 5 },
+              { text: 'Complete solution with point evaluation and tangent line equation.', score: 10 }
+            ],
             maxScore: 10,
             order: 4,
             answers: []

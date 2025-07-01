@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Trash2, Save, ArrowLeft, BookOpen, Edit3 } from 'lucide-react';
+import { Plus, Trash2, Save, ArrowLeft, BookOpen } from 'lucide-react';
 import Layout from '../components/Layout/Layout';
 import { createMockExam, createMockQuestion, updateExamStats, MockExam } from '../data/mockData';
 import toast from 'react-hot-toast';
