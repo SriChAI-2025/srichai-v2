@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
+
+@layer base {
+  * {
+    font-family: 'JetBrains Mono', monospace;
+  }
+  
+  body {
+    background: #f8fafc;
+    font-weight: 500;
+  }
+}
+
+@layer components {
+  .neo-card {
+    @apply bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transform transition-all duration-200;
+  }
+  
+  .neo-card:hover {
+    @apply shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] translate-x-[-2px] translate-y-[-2px];
+  }
+  
+  .neo-button {
+    @apply bg-blue-600 text-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-bold uppercase tracking-wider transform transition-all duration-200 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px];
+  }
+  
+  .neo-button-secondary {
+    @apply bg-white text-black border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-bold uppercase tracking-wider transform transition-all duration-200 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px];
+  }
+  
+  .neo-button-danger {
+    @apply bg-red-500 text-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-bold uppercase tracking-wider transform transition-all duration-200 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px];
+  }
+  
+  .neo-input {
+    @apply bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-bold focus:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] focus:translate-x-[-1px] focus:translate-y-[-1px] focus:outline-none transition-all duration-200;
+  }
+  
+  .neo-stat-card {
+    @apply bg-gradient-to-br border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transform transition-all duration-200;
+  }
+  
+  .neo-stat-card:hover {
+    @apply shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] translate-x-[-1px] translate-y-[-1px];
+  }
+  
+  .neo-progress-bar {
+    @apply bg-gray-200 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)];
+  }
+  
+  .neo-progress-fill {
+    @apply bg-gradient-to-r from-blue-500 to-blue-600 border-r-2 border-black shadow-[2px_0px_0px_0px_rgba(0,0,0,1)];
+  }
+  
+  .neo-badge {
+    @apply border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-bold uppercase tracking-wider text-xs;
+  }
+  
+  .neo-navbar {
+    @apply bg-white border-b-4 border-black shadow-[0px_4px_0px_0px_rgba(0,0,0,1)];
+  }
+  
+  .neo-dropdown {
+    @apply bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)];
+  }
+  
+  /* Hide scrollbar while maintaining scroll functionality */
+  .hide-scrollbar {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+}
