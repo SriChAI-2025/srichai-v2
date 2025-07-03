@@ -58,26 +58,7 @@ const QuestionGrading: React.FC = () => {
     fetchQuestionData();
   }, [questionId]);
 
-  // Keyboard navigation for modal
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (gradingModal.isOpen) {
-        if (event.key === 'ArrowLeft') {
-          event.preventDefault();
-          navigateModalAnswer('prev');
-        } else if (event.key === 'ArrowRight') {
-          event.preventDefault();
-          navigateModalAnswer('next');
-        } else if (event.key === 'Escape') {
-          event.preventDefault();
-          closeGradingModal();
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [gradingModal.isOpen, gradingModal.answerIndex]);
+  // Remove keyboard navigation - using buttons only
 
   const determineSectionInfo = (question: MockQuestion): SectionInfo => {
     // First, try to determine from maxScore
@@ -653,44 +634,7 @@ const QuestionGrading: React.FC = () => {
         </div>
       </div>
 
-      {/* Image Modal */}
-      {imageModal.isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-75">
-          <div className={`relative max-w-7xl max-h-full overflow-hidden ${isNeoBrutalism ? 'neo-card' : 'bg-white rounded-lg'}`}>
-            <div className={`flex items-center justify-between p-4 border-b ${isNeoBrutalism ? 'bg-blue-600 text-white border-black' : 'border-gray-200'}`}>
-              <h3 className={`text-lg font-semibold ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : 'text-gray-900'}`}>
-                Answer by {imageModal.studentId}
-              </h3>
-              <button
-                onClick={closeImageModal}
-                className={isNeoBrutalism ? "neo-button-icon" : "p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors"}
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            <div className="p-4">
-              <img
-                src={imageModal.imageUrl}
-                alt={`Answer by ${imageModal.studentId}`}
-                className="max-w-full max-h-[85vh] object-contain mx-auto"
-              />
-            </div>
-            <div className={`p-4 border-t ${isNeoBrutalism ? 'bg-gray-800 text-white border-black' : 'border-gray-200 bg-gray-50'}`}>
-              <p className={`text-sm text-center ${isNeoBrutalism ? 'font-bold uppercase tracking-wide' : 'text-gray-600'}`}>
-                Click outside the image or press the X button to close
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
 
-      {/* Click outside modal to close */}
-      {imageModal.isOpen && (
-        <div 
-          className="fixed inset-0 z-40" 
-          onClick={closeImageModal}
-        ></div>
-      )}
 
       {/* Detailed Grading Modal */}
       {gradingModal.isOpen && (
@@ -712,7 +656,34 @@ const QuestionGrading: React.FC = () => {
                 </span>
               </div>
               
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-4">
+                {/* Navigation Buttons */}
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => navigateModalAnswer('prev')}
+                    disabled={gradingModal.answerIndex === 0}
+                    className={`px-3 py-1 rounded ${
+                      isNeoBrutalism 
+                        ? 'neo-button-secondary disabled:opacity-50 text-sm' 
+                        : 'bg-gray-100 border border-gray-300 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm'
+                    }`}
+                  >
+                    Previous
+                  </button>
+                  
+                  <button
+                    onClick={() => navigateModalAnswer('next')}
+                    disabled={gradingModal.answerIndex === answers.length - 1}
+                    className={`px-3 py-1 rounded ${
+                      isNeoBrutalism 
+                        ? 'neo-button-secondary disabled:opacity-50 text-sm' 
+                        : 'bg-gray-100 border border-gray-300 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm'
+                    }`}
+                  >
+                    Next
+                  </button>
+                </div>
+                
                 <span className={`text-sm ${isNeoBrutalism ? 'font-bold uppercase tracking-wide' : 'text-gray-500'}`}>
                   {gradingModal.answerIndex + 1} of {answers.length}
                 </span>
@@ -725,221 +696,183 @@ const QuestionGrading: React.FC = () => {
               </div>
             </div>
 
-            {/* Modal Content */}
-            <div className="flex">
-              {/* Navigation Arrow - Left */}
-              <div className="flex items-center">
-                <button
-                  onClick={() => navigateModalAnswer('prev')}
-                  disabled={gradingModal.answerIndex === 0}
-                  className={`m-4 p-3 ${
-                    isNeoBrutalism 
-                      ? 'neo-button-icon disabled:opacity-50' 
-                      : 'bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
-                  }`}
-                >
-                  <ChevronLeft className="h-6 w-6" />
-                </button>
-              </div>
-
-              {/* Main Content */}
-              <div className="flex-1 p-6 max-h-[80vh] overflow-y-auto">
-                {/* Question Context */}
-                <div className={`p-4 rounded-lg mb-6 ${isNeoBrutalism ? 'neo-badge bg-blue-600 text-white border-2 border-black' : 'bg-blue-50 border border-blue-200'}`}>
-                  <h4 className={`text-sm font-semibold mb-2 ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : 'text-blue-900'}`}>
-                    Question
+            {/* Three Column Layout */}
+            <div className="flex max-h-[85vh]">
+              {/* Left Column - Question & Rubric */}
+              <div className={`w-1/3 p-6 border-r ${isNeoBrutalism ? 'border-black bg-gray-50' : 'border-gray-200 bg-gray-50'} overflow-y-auto`}>
+                {/* Question */}
+                <div className="mb-6">
+                  <h4 className={`text-lg font-semibold mb-3 ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : 'text-gray-900'}`}>
+                    Question 1
                   </h4>
-                  <p className={`text-sm leading-relaxed ${isNeoBrutalism ? 'font-bold' : 'text-blue-800'}`}>
+                  <p className={`text-sm leading-relaxed mb-4 ${isNeoBrutalism ? 'font-bold' : 'text-gray-700'}`}>
                     {question.promptText}
                   </p>
                 </div>
 
-                {/* Student Answer - Large View */}
-                <div className="mb-6">
-                  <h4 className={`text-lg font-semibold mb-4 ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : 'text-gray-900'}`}>
-                    Student Answer
+                {/* Rubric */}
+                <div>
+                  <h4 className={`text-lg font-semibold mb-3 ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : 'text-gray-900'}`}>
+                    Rubric
                   </h4>
-                  <div className="relative group">
-                    {answers[gradingModal.answerIndex]?.answerImage ? (
-                      <div className="relative">
-                        <img
-                          src={answers[gradingModal.answerIndex].answerImage}
-                          alt={`Answer by ${answers[gradingModal.answerIndex].studentId}`}
-                          className={`w-full max-h-96 object-contain rounded-lg cursor-pointer hover:opacity-95 transition-opacity ${isNeoBrutalism ? 'border-4 border-black' : 'border border-gray-200 shadow-sm'}`}
-                          onClick={() => openImageModal(answers[gradingModal.answerIndex].answerImage!, answers[gradingModal.answerIndex].studentId)}
-                        />
-                        <div className={`absolute top-3 right-3 bg-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity ${isNeoBrutalism ? 'border-2 border-black' : ''}`}>
-                          <Maximize2 className="h-5 w-5 text-gray-600" />
-                        </div>
+                  <div className={`p-4 rounded-lg ${isNeoBrutalism ? 'neo-badge bg-blue-600 text-white border-2 border-black' : 'bg-white border border-gray-200'}`}>
+                    <div className="space-y-3 text-sm">
+                      <div>
+                        <span className={`font-semibold ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : ''}`}>
+                          dasd
+                        </span>
+                        <br />
+                        <span className={isNeoBrutalism ? 'font-bold' : 'text-gray-600'}>
+                          as
+                        </span>
                       </div>
-                    ) : (
-                      <div className={`w-full h-64 bg-gray-100 rounded-lg border-2 border-dashed flex items-center justify-center ${isNeoBrutalism ? 'border-black' : 'border-gray-300'}`}>
-                        <div className="text-center">
-                          <ImageIcon className={`mx-auto h-12 w-12 ${isNeoBrutalism ? 'text-black' : 'text-gray-400'}`} />
-                          <p className={`mt-3 text-lg ${isNeoBrutalism ? 'font-bold text-black' : 'text-gray-500'}`}>
-                            No image submitted
-                          </p>
-                        </div>
+                      <div>
+                        <span className={`font-semibold ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : ''}`}>
+                          asdasdos
+                        </span>
+                        <br />
+                        <span className={isNeoBrutalism ? 'font-bold' : 'text-gray-600'}>
+                          dasdas
+                        </span>
                       </div>
-                    )}
+                      <div>
+                        <span className={`font-semibold ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : ''}`}>
+                          das → 1 mark
+                        </span>
+                        <br />
+                        <span className={isNeoBrutalism ? 'font-bold' : 'text-gray-600'}>
+                          dasdasdasdasdas
+                        </span>
+                      </div>
+                      <div>
+                        <span className={`font-semibold ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : ''}`}>
+                          dsfgdsfgsfg
+                        </span>
+                        <br />
+                        <span className={isNeoBrutalism ? 'font-bold' : 'text-gray-600'}>
+                          sdfsdfsdfs
+                        </span>
+                      </div>
+                      <div>
+                        <span className={`font-semibold ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : ''}`}>
+                          fdsfdssdf→ 2 marks
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
+              </div>
 
-                {/* Model Answer Reference */}
-                <div className={`p-4 rounded-lg mb-6 ${isNeoBrutalism ? 'neo-badge bg-green-600 text-white border-2 border-black' : 'bg-green-50 border border-green-200'}`}>
-                  <h4 className={`text-sm font-semibold mb-2 ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : 'text-green-900'}`}>
-                    Model Answer (Reference)
+              {/* Center Column - Student Answer */}
+              <div className="w-1/3 p-6 flex flex-col">
+                {/* Student Info */}
+                <div className="flex items-center justify-center mb-4">
+                  <h4 className={`text-lg font-semibold ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : 'text-gray-900'}`}>
+                    Student {answers[gradingModal.answerIndex]?.studentId.replace(/[A-Z]+/, '')}
                   </h4>
-                  <p className={`text-sm leading-relaxed ${isNeoBrutalism ? 'font-bold' : 'text-green-800'}`}>
-                    {question.modelAnswer}
-                  </p>
                 </div>
 
-                {/* Grading Section */}
-                <div className={`border-t pt-6 ${isNeoBrutalism ? 'border-black' : 'border-gray-200'}`}>
-                  <h4 className={`text-lg font-semibold mb-4 ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : 'text-gray-900'}`}>
-                    Grade This Answer
-                  </h4>
-                  
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div>
-                      <label className={`block text-sm font-medium mb-2 ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : 'text-gray-700'}`}>
-                        Score (0-{sectionInfo.maxScore})
-                      </label>
-                      <input
-                        type="number"
-                        min="0"
-                        max={sectionInfo.maxScore}
-                        value={scores[answers[gradingModal.answerIndex]?._id]?.score || ''}
-                        onChange={(e) => setScores(prev => ({
-                          ...prev,
-                          [answers[gradingModal.answerIndex]._id]: {
-                            ...prev[answers[gradingModal.answerIndex]._id],
-                            score: parseInt(e.target.value) || 0
-                          }
-                        }))}
-                        className={`w-full px-4 py-3 text-lg ${
-                          isNeoBrutalism 
-                            ? 'neo-input font-bold' 
-                            : 'border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
-                        }`}
-                        placeholder={isNeoBrutalism ? 'ENTER SCORE' : 'Enter score'}
+                {/* Student Answer Image */}
+                <div className="flex-1 flex items-center justify-center">
+                  {answers[gradingModal.answerIndex]?.answerImage ? (
+                    <div className="relative w-full">
+                      <img
+                        src={answers[gradingModal.answerIndex].answerImage}
+                        alt={`Answer by ${answers[gradingModal.answerIndex].studentId}`}
+                        className={`w-full max-h-[60vh] object-contain rounded-lg cursor-pointer hover:opacity-95 transition-opacity ${isNeoBrutalism ? 'border-4 border-black' : 'border border-gray-200 shadow-sm'}`}
+                        onClick={() => openImageModal(answers[gradingModal.answerIndex].answerImage!, answers[gradingModal.answerIndex].studentId)}
                       />
-                    </div>
-                    
-                    <div>
-                      <label className={`block text-sm font-medium mb-2 ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : 'text-gray-700'}`}>
-                        Feedback (Optional)
-                      </label>
-                      <textarea
-                        rows={4}
-                        value={scores[answers[gradingModal.answerIndex]?._id]?.feedback || ''}
-                        onChange={(e) => setScores(prev => ({
-                          ...prev,
-                          [answers[gradingModal.answerIndex]._id]: {
-                            ...prev[answers[gradingModal.answerIndex]._id],
-                            feedback: e.target.value
-                          }
-                        }))}
-                        className={`w-full px-4 py-3 ${
-                          isNeoBrutalism 
-                            ? 'neo-input font-bold' 
-                            : 'border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
-                        }`}
-                        placeholder={isNeoBrutalism ? 'PROVIDE DETAILED FEEDBACK...' : 'Provide detailed feedback to the student...'}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex items-center justify-between mt-6">
-                    <button
-                      onClick={() => generateAIScore(answers[gradingModal.answerIndex])}
-                      className={`${aiButtonClass} px-6 py-3`}
-                    >
-                      <Bot className="h-4 w-4 mr-2" />
-                      {isNeoBrutalism ? 'SRICHAI GRADE' : 'Ask SriChAI to Grade'}
-                    </button>
-                    
-                    <div className="flex space-x-3">
-                      <button
-                        onClick={() => saveScore(answers[gradingModal.answerIndex]._id)}
-                        disabled={!scores[answers[gradingModal.answerIndex]?._id]?.score && scores[answers[gradingModal.answerIndex]?._id]?.score !== 0}
-                        className={`${buttonPrimaryClass} px-6 py-3 disabled:opacity-50 disabled:cursor-not-allowed`}
-                      >
-                        <Save className="h-4 w-4 mr-2" />
-                        {isNeoBrutalism ? 'SAVE SCORE' : 'Save Score'}
-                      </button>
-                      
-                      <button
-                        onClick={closeGradingModal}
-                        className={`${buttonSecondaryClass} px-6 py-3`}
-                      >
-                        {isNeoBrutalism ? 'CLOSE' : 'Close'}
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Existing Score Display */}
-                  {answers[gradingModal.answerIndex]?.score !== undefined && (
-                    <div className={`mt-6 p-4 rounded-lg ${isNeoBrutalism ? 'neo-badge bg-yellow-600 text-white border-2 border-black' : 'bg-yellow-50 border border-yellow-200'}`}>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h5 className={`text-sm font-medium ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : 'text-yellow-900'}`}>
-                            Current Score
-                          </h5>
-                          <p className={`text-2xl font-bold ${isNeoBrutalism ? 'font-black' : 'text-yellow-900'}`}>
-                            {answers[gradingModal.answerIndex].score}/{sectionInfo.maxScore}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                            answers[gradingModal.answerIndex].scoreGivenBy === 'ai' 
-                              ? isNeoBrutalism ? 'neo-badge bg-purple-600 text-white border-2 border-black' : 'bg-purple-100 text-purple-800'
-                              : isNeoBrutalism ? 'neo-badge bg-green-600 text-white border-2 border-black' : 'bg-green-100 text-green-800'
-                          }`}>
-                            {answers[gradingModal.answerIndex].scoreGivenBy === 'ai' ? (
-                              <>
-                                <Bot className="h-3 w-3 mr-1" />
-                                {isNeoBrutalism ? 'AI GRADED' : 'AI Graded'}
-                              </>
-                            ) : (
-                              <>
-                                <User className="h-3 w-3 mr-1" />
-                                {isNeoBrutalism ? 'TEACHER GRADED' : 'Teacher Graded'}
-                              </>
-                            )}
-                          </span>
-                        </div>
+                      <div className={`absolute top-3 right-3 bg-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity ${isNeoBrutalism ? 'border-2 border-black' : ''}`}>
+                        <Maximize2 className="h-5 w-5 text-gray-600" />
                       </div>
-                      {answers[gradingModal.answerIndex].feedback && (
-                        <div className="mt-3">
-                          <h6 className={`text-xs font-medium mb-1 ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : 'text-yellow-900'}`}>
-                            Previous Feedback:
-                          </h6>
-                          <p className={`text-sm ${isNeoBrutalism ? 'font-bold' : 'text-yellow-800'}`}>
-                            {answers[gradingModal.answerIndex].feedback}
-                          </p>
-                        </div>
-                      )}
+                    </div>
+                  ) : (
+                    <div className={`w-full h-64 bg-gray-100 rounded-lg border-2 border-dashed flex items-center justify-center ${isNeoBrutalism ? 'border-black' : 'border-gray-300'}`}>
+                      <div className="text-center">
+                        <ImageIcon className={`mx-auto h-12 w-12 ${isNeoBrutalism ? 'text-black' : 'text-gray-400'}`} />
+                        <p className={`mt-3 text-lg ${isNeoBrutalism ? 'font-bold text-black' : 'text-gray-500'}`}>
+                          No image submitted
+                        </p>
+                      </div>
                     </div>
                   )}
                 </div>
               </div>
 
-              {/* Navigation Arrow - Right */}
-              <div className="flex items-center">
-                <button
-                  onClick={() => navigateModalAnswer('next')}
-                  disabled={gradingModal.answerIndex === answers.length - 1}
-                  className={`m-4 p-3 ${
-                    isNeoBrutalism 
-                      ? 'neo-button-icon disabled:opacity-50' 
-                      : 'bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
-                  }`}
-                >
-                  <ChevronRight className="h-6 w-6" />
-                </button>
+              {/* Right Column - Grading Controls */}
+              <div className={`w-1/3 p-6 border-l ${isNeoBrutalism ? 'border-black bg-gray-50' : 'border-gray-200 bg-gray-50'} flex flex-col`}>
+                <div className="flex-1 space-y-4">
+                  {/* Score Box */}
+                  <div className={`p-4 rounded-lg border-2 h-32 ${isNeoBrutalism ? 'border-black bg-white' : 'border-gray-300 bg-white'}`}>
+                    <label className={`block text-sm font-medium mb-2 ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : 'text-gray-700'}`}>
+                      Score (0-{sectionInfo.maxScore})
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      max={sectionInfo.maxScore}
+                      value={scores[answers[gradingModal.answerIndex]?._id]?.score || ''}
+                      onChange={(e) => setScores(prev => ({
+                        ...prev,
+                        [answers[gradingModal.answerIndex]._id]: {
+                          ...prev[answers[gradingModal.answerIndex]._id],
+                          score: parseInt(e.target.value) || 0
+                        }
+                      }))}
+                      className={`w-full px-3 py-2 text-lg ${
+                        isNeoBrutalism 
+                          ? 'neo-input font-bold' 
+                          : 'border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                      }`}
+                      placeholder={isNeoBrutalism ? 'ENTER SCORE' : 'Enter score'}
+                    />
+                  </div>
+
+                  {/* Feedback Box */}
+                  <div className={`p-4 rounded-lg border-2 h-48 ${isNeoBrutalism ? 'border-black bg-white' : 'border-gray-300 bg-white'} flex flex-col`}>
+                    <label className={`block text-sm font-medium mb-2 ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : 'text-gray-700'}`}>
+                      Feedback
+                    </label>
+                    <textarea
+                      value={scores[answers[gradingModal.answerIndex]?._id]?.feedback || ''}
+                      onChange={(e) => setScores(prev => ({
+                        ...prev,
+                        [answers[gradingModal.answerIndex]._id]: {
+                          ...prev[answers[gradingModal.answerIndex]._id],
+                          feedback: e.target.value
+                        }
+                      }))}
+                      className={`flex-1 w-full px-3 py-2 text-sm resize-none ${
+                        isNeoBrutalism 
+                          ? 'neo-input font-bold' 
+                          : 'border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                      }`}
+                      placeholder={isNeoBrutalism ? 'PROVIDE FEEDBACK...' : 'Provide feedback...'}
+                    />
+                  </div>
+                </div>
+
+                {/* Ask SriChAI Button */}
+                <div className="mt-6">
+                  <button
+                    onClick={() => generateAIScore(answers[gradingModal.answerIndex])}
+                    className={`w-full px-6 py-4 text-lg ${aiButtonClass}`}
+                  >
+                    Ask SriChAI
+                  </button>
+                </div>
+
+                {/* Save Button */}
+                <div className="mt-3">
+                  <button
+                    onClick={() => saveScore(answers[gradingModal.answerIndex]._id)}
+                    disabled={!scores[answers[gradingModal.answerIndex]?._id]?.score && scores[answers[gradingModal.answerIndex]?._id]?.score !== 0}
+                    className={`w-full px-6 py-3 ${buttonPrimaryClass} disabled:opacity-50 disabled:cursor-not-allowed`}
+                  >
+                    <Save className="h-4 w-4 mr-2" />
+                    {isNeoBrutalism ? 'SAVE SCORE' : 'Save Score'}
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -947,7 +880,7 @@ const QuestionGrading: React.FC = () => {
             <div className={`p-4 border-t ${isNeoBrutalism ? 'bg-gray-800 text-white border-black' : 'border-gray-200 bg-gray-50'}`}>
               <div className="flex items-center justify-between">
                                  <div className={`text-sm ${isNeoBrutalism ? 'font-bold uppercase tracking-wide' : 'text-gray-600'}`}>
-                   Use ← → arrows to navigate • ESC to close
+                   Click dots below to jump to any student
                  </div>
                 <div className="flex space-x-2">
                   {answers.map((_, index) => (
@@ -973,6 +906,45 @@ const QuestionGrading: React.FC = () => {
         <div 
           className="fixed inset-0 z-40" 
           onClick={closeGradingModal}
+        ></div>
+      )}
+
+      {/* Image Modal - Rendered after grading modal to appear on top */}
+      {imageModal.isOpen && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-2 bg-black bg-opacity-90">
+          <div className={`relative w-[95vw] h-[95vh] overflow-hidden ${isNeoBrutalism ? 'neo-card' : 'bg-white rounded-lg'}`}>
+            <div className={`flex items-center justify-between p-4 border-b ${isNeoBrutalism ? 'bg-blue-600 text-white border-black' : 'border-gray-200'}`}>
+              <h3 className={`text-xl font-semibold ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : 'text-gray-900'}`}>
+                Answer by {imageModal.studentId}
+              </h3>
+              <button
+                onClick={closeImageModal}
+                className={isNeoBrutalism ? "neo-button-icon" : "p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors"}
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+            <div className="p-6 h-full flex items-center justify-center">
+              <img
+                src={imageModal.imageUrl}
+                alt={`Answer by ${imageModal.studentId}`}
+                className="max-w-full max-h-[80vh] object-contain mx-auto"
+              />
+            </div>
+            <div className={`absolute bottom-0 left-0 right-0 p-4 border-t ${isNeoBrutalism ? 'bg-gray-800 text-white border-black' : 'border-gray-200 bg-gray-50'}`}>
+              <p className={`text-sm text-center ${isNeoBrutalism ? 'font-bold uppercase tracking-wide' : 'text-gray-600'}`}>
+                Click outside the image or press the X button to close
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Click outside image modal to close */}
+      {imageModal.isOpen && (
+        <div 
+          className="fixed inset-0 z-[9998]" 
+          onClick={closeImageModal}
         ></div>
       )}
     </Layout>
