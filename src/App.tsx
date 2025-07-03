@@ -13,6 +13,7 @@ import CreateExam from './pages/CreateExam';
 import ExamList from './pages/ExamList';
 import ExamDetail from './pages/ExamDetail';
 import QuestionGrading from './pages/QuestionGrading';
+import ExamGrading from './pages/ExamGrading';
 
 // Student Pages
 import StudentDashboard from './pages/StudentDashboard';
@@ -83,6 +84,12 @@ function App() {
               } />
               
               <Route path="/exams/:examId/grade" element={
+                <ProtectedRoute allowedRoles={['teacher']}>
+                  <ExamGrading />
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/questions/:questionId/grade" element={
                 <ProtectedRoute allowedRoles={['teacher']}>
                   <QuestionGrading />
                 </ProtectedRoute>

@@ -61,7 +61,15 @@ export interface MockAnswer {
 
 // Generate student IDs
 const generateStudentIds = (count: number) => {
-  return Array.from({ length: count }, (_, i) => `student_${(i + 1).toString().padStart(3, '0')}`);
+  const departments = ['CSE', 'ECE', 'ME', 'EE'];
+  const years = ['21', '22', '23'];
+  
+  return Array.from({ length: count }, (_, i) => {
+    const dept = departments[i % departments.length];
+    const year = years[Math.floor(i / departments.length) % years.length];
+    const rollNum = (i + 1).toString().padStart(3, '0');
+    return `${dept}${year}${rollNum}`;
+  });
 };
 
 // Generate random image URLs from Pexels
@@ -784,7 +792,7 @@ export const mockExams: MockExam[] = [
 ];
 
 // Generate answers for all questions
-const studentIds = generateStudentIds(8); // 8 students
+const studentIds = generateStudentIds(12); // 12 students for better testing
 
 // Add answers to all questions
 mockExams.forEach(exam => {
