@@ -1,19 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import LoginForm from '../components/Auth/LoginForm';
-import RegisterForm from '../components/Auth/RegisterForm';
 
 const AuthPage: React.FC = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
-  const toggleMode = () => {
-    setIsLogin(!isLogin);
-  };
+  useEffect(() => {
+    if (user) {
+      // Redirect to appropriate dashboard based on user role
+      if (user.role === 'teacher') {
+        navigate('/dashboard', { replace: true });
+      } else {
+        navigate('/student-dashboard', { replace: true });
+      }
+    }
+  }, [user, navigate]);
 
-  return isLogin ? (
-    <LoginForm onToggleMode={toggleMode} />
-  ) : (
-    <RegisterForm onToggleMode={toggleMode} />
-  );
+  // Don't render the login form if user is already authenticated
+  if (user) {
+    return null;
+  }
+
+  return <LoginForm />;
 };
 
 export default AuthPage;

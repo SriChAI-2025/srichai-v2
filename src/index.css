@@ -13,9 +13,16 @@
     background: #f8fafc;
     font-weight: 500;
   }
+
+  /* Classic theme body override */
+  .theme-classic body {
+    background: #f9fafb;
+    font-weight: 400;
+  }
 }
 
 @layer components {
+  /* Default Neo-Brutalism styles (original working styles) */
   .neo-card {
     @apply bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transform transition-all duration-200;
   }
@@ -67,16 +74,359 @@
   .neo-dropdown {
     @apply bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)];
   }
+
+  .neo-card-header {
+    @apply bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transform transition-all duration-200;
+  }
+
+  .neo-toggle {
+    @apply border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform transition-all duration-200;
+  }
+
+  .neo-toggle-knob {
+    @apply bg-white border-2 border-black transform transition-all duration-200;
+  }
+
+  .neo-sidebar {
+    @apply bg-white border-r-4 border-black shadow-[4px_0px_0px_0px_rgba(0,0,0,1)];
+  }
+
+  .neo-mobile-header {
+    @apply bg-white border-b-4 border-black shadow-[0px_4px_0px_0px_rgba(0,0,0,1)];
+  }
+
+  /* ========================================
+     CLASSIC THEME OVERRIDES
+     ======================================== */
+
+  /* Classic Cards */
+  .theme-classic .neo-card {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    transform: none;
+    transition: all 0.3s ease;
+  }
   
+  .theme-classic .neo-card:hover {
+    box-shadow: 0 20px 35px -8px rgba(0, 0, 0, 0.15), 0 12px 20px -10px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .theme-classic .neo-card-header {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    transform: none;
+  }
+
+  /* Classic Buttons */
+  .theme-classic .neo-button {
+    background-color: #2563eb;
+    color: white;
+    border: 0;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: normal;
+    transform: none;
+    box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+    transition: all 0.3s ease;
+  }
+  
+  .theme-classic .neo-button:hover {
+    background-color: #1d4ed8;
+    box-shadow: 0 8px 25px 0 rgba(59, 130, 246, 0.5);
+    transform: translateY(-1px);
+  }
+  
+  .theme-classic .neo-button:active {
+    box-shadow: 0 2px 10px 0 rgba(59, 130, 246, 0.3);
+    transform: translateY(0px);
+  }
+  
+  .theme-classic .neo-button-secondary {
+    background-color: white;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: normal;
+    transform: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+  }
+  
+  .theme-classic .neo-button-secondary:hover {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+    box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transform: translateY(-1px);
+  }
+  
+  .theme-classic .neo-button-secondary:active {
+    transform: translateY(0px);
+  }
+  
+  .theme-classic .neo-button-danger {
+    background-color: #dc2626;
+    color: white;
+    border: 0;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: normal;
+    transform: none;
+    box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.39);
+    transition: all 0.3s ease;
+  }
+  
+  .theme-classic .neo-button-danger:hover {
+    background-color: #b91c1c;
+    box-shadow: 0 8px 25px 0 rgba(239, 68, 68, 0.5);
+    transform: translateY(-1px);
+  }
+  
+  .theme-classic .neo-button-danger:active {
+    transform: translateY(0px);
+  }
+
+  /* Classic Inputs */
+  .theme-classic .neo-input {
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: normal;
+    transform: none;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+  }
+  
+  .theme-classic .neo-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    outline: none;
+  }
+
+  .theme-classic .neo-input::placeholder {
+    text-transform: none;
+    letter-spacing: normal;
+  }
+
+  /* Classic Progress */
+  .theme-classic .neo-progress-bar {
+    background-color: #e5e7eb;
+    border: 0;
+    border-radius: 9999px;
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  }
+  
+  .theme-classic .neo-progress-fill {
+    background: linear-gradient(to right, #3b82f6, #2563eb);
+    border: 0;
+    border-radius: 9999px;
+    box-shadow: none;
+  }
+
+  /* Classic Badges */
+  .theme-classic .neo-badge {
+    border: 0;
+    border-radius: 9999px;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: normal;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  /* Classic Navigation */
+  .theme-classic .neo-navbar {
+    background-color: white;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  }
+
+  .theme-classic .neo-sidebar {
+    background-color: white;
+    border-right: 1px solid #e5e7eb;
+    box-shadow: 4px 0 6px -1px rgba(0, 0, 0, 0.1), 2px 0 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  .theme-classic .neo-mobile-header {
+    background-color: white;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  /* Classic Dropdown */
+  .theme-classic .neo-dropdown {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Classic Toggles */
+  .theme-classic .neo-toggle {
+    border: 1px solid #d1d5db;
+    border-radius: 9999px;
+    transform: none;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .theme-classic .neo-toggle-knob {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 9999px;
+    transform: none;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+  }
+
+  /* Classic Typography Overrides */
+  .theme-classic h1,
+  .theme-classic h2,
+  .theme-classic h3,
+  .theme-classic h4,
+  .theme-classic h5,
+  .theme-classic h6 {
+    text-transform: none;
+    letter-spacing: normal;
+    font-weight: 600;
+  }
+
+  .theme-classic p,
+  .theme-classic span,
+  .theme-classic div {
+    text-transform: none;
+    letter-spacing: normal;
+    font-weight: 400;
+  }
+
+  /* Specific overrides for components that might have inline styles */
+  .theme-classic .font-black {
+    font-weight: 600;
+  }
+
+  .theme-classic .font-bold {
+    font-weight: 500;
+  }
+
+  .theme-classic .uppercase {
+    text-transform: none;
+  }
+
+  .theme-classic .tracking-wider,
+  .theme-classic .tracking-wide {
+    letter-spacing: normal;
+  }
+
+  /* Classic Stat Cards */
+  .theme-classic .neo-stat-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    transform: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+  }
+  
+  .theme-classic .neo-stat-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+  }
+  
+  /* Classic Student View Components */
+  .theme-classic .neo-upload-zone {
+    border: 2px dashed #d1d5db;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .theme-classic .neo-upload-zone:hover {
+    border-color: #60a5fa;
+    background-color: #eff6ff;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Classic Image Preview Modal */
+  .theme-classic .neo-card .bg-gray-900 {
+    background-color: #1f2937;
+    border: 0;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+  }
+
+  /* Classic Question Navigator */
+  .theme-classic .neo-card.bg-blue-600 {
+    border: 0;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+  }
+
+  .theme-classic .neo-card.bg-green-500 {
+    border: 0;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 14px 0 rgba(34, 197, 94, 0.39);
+  }
+
+  /* Classic Shadow utilities for new components */
+  .theme-classic .neo-shadow-right {
+    box-shadow: 4px 0 6px -1px rgba(0, 0, 0, 0.1), 2px 0 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Student View specific colors in classic theme */
+  .theme-classic .bg-green-600 {
+    box-shadow: 0 4px 14px 0 rgba(34, 197, 94, 0.39);
+  }
+
+  .theme-classic .hover\\:bg-green-700:hover {
+    box-shadow: 0 8px 25px 0 rgba(34, 197, 94, 0.5);
+  }
+
+  .theme-classic .bg-gray-600 {
+    box-shadow: 0 4px 14px 0 rgba(75, 85, 99, 0.39);
+  }
+
+  .theme-classic .hover\\:bg-gray-700:hover {
+    box-shadow: 0 8px 25px 0 rgba(75, 85, 99, 0.5);
+  }
+
+  /* Question panels in classic theme */
+  .theme-classic .bg-blue-600.text-white.p-4 {
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .theme-classic .bg-green-600.text-white.p-4 {
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border: 0;
+    box-shadow: none;
+  }
+
+  /* Classic theme for nested cards */
+  .theme-classic .neo-card .neo-card {
+    border: 1px solid #f3f4f6;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  }
+
   /* Hide scrollbar while maintaining scroll functionality */
   .hide-scrollbar {
-    /* Hide scrollbar for Chrome, Safari and Opera */
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
   
   .hide-scrollbar::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
+    display: none;
   }
 }

@@ -3,15 +3,19 @@ export interface MockExam {
   _id: string;
   title: string;
   description: string;
+  subject: string;
   examCode: string;
   createdAt: string;
   status: 'draft' | 'active' | 'completed';
+  duration: number;
   sections: MockSection[];
   stats: {
     questionCount: number;
     totalAnswers: number;
     gradedAnswers: number;
     studentCount: number;
+    submitted: number;
+    graded: number;
   };
 }
 
@@ -213,9 +217,11 @@ export const mockExams: MockExam[] = [
     _id: 'exam1',
     title: 'Physics Midterm 2024',
     description: 'Comprehensive physics examination covering mechanics, thermodynamics, and wave motion',
+    subject: 'Physics',
     examCode: 'PHYS2024MID',
     createdAt: '2024-01-15T10:00:00Z',
     status: 'active',
+    duration: 120,
     sections: [
       {
         _id: 'section1',
@@ -486,16 +492,20 @@ export const mockExams: MockExam[] = [
       questionCount: 15,
       totalAnswers: 0,
       gradedAnswers: 0,
-      studentCount: 0
+      studentCount: 0,
+      submitted: 45,
+      graded: 38
     }
   },
   {
     _id: 'exam2',
     title: 'Mathematics Final Exam',
     description: 'Comprehensive mathematics examination covering algebra, calculus, and geometry',
+    subject: 'Mathematics',
     examCode: 'MATH2024FIN',
     createdAt: '2024-01-10T09:00:00Z',
     status: 'completed',
+    duration: 180,
     sections: [
       {
         _id: 'section4',
@@ -766,7 +776,9 @@ export const mockExams: MockExam[] = [
       questionCount: 15,
       totalAnswers: 0,
       gradedAnswers: 0,
-      studentCount: 0
+      studentCount: 0,
+      submitted: 42,
+      graded: 42
     }
   }
 ];
@@ -793,7 +805,9 @@ mockExams.forEach(exam => {
     questionCount: exam.sections.reduce((sum, s) => sum + s.questions.length, 0),
     totalAnswers: allAnswers.length,
     gradedAnswers: gradedAnswers.length,
-    studentCount: studentIds.length
+    studentCount: studentIds.length,
+    submitted: allAnswers.length,
+    graded: gradedAnswers.length
   };
 });
 
@@ -813,15 +827,19 @@ export const createMockExam = (examData: Partial<MockExam>): MockExam => {
     _id: `exam${examCounter++}`,
     title: examData.title || 'New Exam',
     description: examData.description || '',
+    subject: examData.subject || 'General',
+    examCode: examCode,
     createdAt: new Date().toISOString(),
     status: examData.status || 'draft',
+    duration: examData.duration || 60,
     sections: examData.sections || [],
-    examCode: examCode,
     stats: {
       questionCount: 0,
       totalAnswers: 0,
       gradedAnswers: 0,
-      studentCount: 0
+      studentCount: 0,
+      submitted: 0,
+      graded: 0
     }
   };
   
@@ -877,6 +895,8 @@ export const updateExamStats = (examId: string) => {
     questionCount: exam.sections.reduce((sum, s) => sum + s.questions.length, 0),
     totalAnswers: allAnswers.length,
     gradedAnswers: gradedAnswers.length,
-    studentCount: studentIds.length
+    studentCount: studentIds.length,
+    submitted: allAnswers.length,
+    graded: gradedAnswers.length
   };
 };

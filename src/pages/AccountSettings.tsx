@@ -5,12 +5,21 @@ import {
   Shield, 
   Save,
   Eye,
-  EyeOff
+  EyeOff,
+  LogOut,
+  AlertTriangle
 } from 'lucide-react';
 import Layout from '../components/Layout/Layout';
+import { useTheme } from '../contexts/ThemeContext';
+import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const AccountSettings: React.FC = () => {
+  const { theme, setTheme } = useTheme();
+  const { logout, user } = useAuth();
+  const navigate = useNavigate();
+  
   const [settings, setSettings] = useState({
     notifications: {
       emailNotifications: true,
@@ -24,7 +33,6 @@ const AccountSettings: React.FC = () => {
       analyticsTracking: true
     },
     preferences: {
-      theme: 'neo-brutalism',
       language: 'english',
       autoSave: true,
       aiAssistance: true
@@ -62,11 +70,17 @@ const AccountSettings: React.FC = () => {
     setShowPasswordChange(false);
   };
 
+  const handleLogout = () => {
+    logout();
+    toast.success('LOGGED OUT SUCCESSFULLY!');
+    navigate('/auth');
+  };
+
   return (
     <Layout>
       <div className="space-y-8">
         {/* Header */}
-        <div className="bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-6 transform">
+        <div className="neo-card-header p-6 transform">
           <h1 className="text-4xl font-black text-black uppercase tracking-wider mb-2">SETTINGS</h1>
           <p className="text-lg font-bold text-gray-700 uppercase tracking-wide">
             CUSTOMIZE YOUR EXPERIENCE
@@ -98,11 +112,11 @@ const AccountSettings: React.FC = () => {
                   </div>
                   <button
                     onClick={() => handleSettingChange('notifications', key, !value)}
-                    className={`w-16 h-8 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform transition-all duration-200 ${
-                      value ? 'bg-green-500' : 'bg-gray-300'
+                    className={`neo-toggle w-16 h-8 ${
+                      value ? 'bg-blue-500' : 'bg-gray-300'
                     }`}
                   >
-                    <div className={`w-6 h-6 bg-white border-2 border-black transform transition-all duration-200 ${
+                    <div className={`neo-toggle-knob w-6 h-6 ${
                       value ? 'translate-x-6' : 'translate-x-0'
                     }`}></div>
                   </button>
@@ -113,7 +127,7 @@ const AccountSettings: React.FC = () => {
 
           {/* Privacy */}
           <div className="neo-card">
-            <div className="bg-purple-600 text-white p-6 border-b-4 border-black">
+            <div className="bg-blue-600 text-white p-6 border-b-4 border-black">
               <h3 className="text-2xl font-black uppercase tracking-wider flex items-center space-x-3">
                 <Shield className="h-6 w-6" />
                 <span>PRIVACY</span>
@@ -148,11 +162,11 @@ const AccountSettings: React.FC = () => {
                   </div>
                   <button
                     onClick={() => handleSettingChange('privacy', key, !value)}
-                    className={`w-16 h-8 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform transition-all duration-200 ${
-                      value ? 'bg-green-500' : 'bg-gray-300'
+                    className={`neo-toggle w-16 h-8 ${
+                      value ? 'bg-blue-500' : 'bg-gray-300'
                     }`}
                   >
-                    <div className={`w-6 h-6 bg-white border-2 border-black transform transition-all duration-200 ${
+                    <div className={`neo-toggle-knob w-6 h-6 ${
                       value ? 'translate-x-6' : 'translate-x-0'
                     }`}></div>
                   </button>
@@ -163,7 +177,7 @@ const AccountSettings: React.FC = () => {
 
           {/* Preferences */}
           <div className="neo-card">
-            <div className="bg-orange-500 text-white p-6 border-b-4 border-black">
+            <div className="bg-blue-600 text-white p-6 border-b-4 border-black">
               <h3 className="text-2xl font-black uppercase tracking-wider flex items-center space-x-3">
                 <Globe className="h-6 w-6" />
                 <span>PREFERENCES</span>
@@ -175,13 +189,12 @@ const AccountSettings: React.FC = () => {
                   THEME
                 </p>
                 <select
-                  value={settings.preferences.theme}
-                  onChange={(e) => handleSettingChange('preferences', 'theme', e.target.value)}
+                  value={theme}
+                  onChange={(e) => setTheme(e.target.value as 'neo-brutalism' | 'classic')}
                   className="neo-input w-full px-4 py-3 text-lg font-bold"
                 >
                   <option value="neo-brutalism">NEO BRUTALISM</option>
                   <option value="classic">CLASSIC</option>
-                  <option value="dark">DARK MODE</option>
                 </select>
               </div>
 
@@ -213,11 +226,11 @@ const AccountSettings: React.FC = () => {
                   </div>
                   <button
                     onClick={() => handleSettingChange('preferences', key, !value)}
-                    className={`w-16 h-8 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform transition-all duration-200 ${
-                      value ? 'bg-green-500' : 'bg-gray-300'
+                    className={`neo-toggle w-16 h-8 ${
+                      value ? 'bg-blue-500' : 'bg-gray-300'
                     }`}
                   >
-                    <div className={`w-6 h-6 bg-white border-2 border-black transform transition-all duration-200 ${
+                    <div className={`neo-toggle-knob w-6 h-6 ${
                       value ? 'translate-x-6' : 'translate-x-0'
                     }`}></div>
                   </button>
@@ -228,7 +241,7 @@ const AccountSettings: React.FC = () => {
 
           {/* Security */}
           <div className="neo-card">
-            <div className="bg-red-500 text-white p-6 border-b-4 border-black">
+            <div className="bg-blue-600 text-white p-6 border-b-4 border-black">
               <h3 className="text-2xl font-black uppercase tracking-wider flex items-center space-x-3">
                 <Shield className="h-6 w-6" />
                 <span>SECURITY</span>
@@ -288,13 +301,70 @@ const AccountSettings: React.FC = () => {
                 </div>
               )}
 
-              <div className="bg-yellow-100 border-4 border-black p-4">
-                <p className="text-sm font-black text-yellow-900 uppercase tracking-wider mb-2">
+              <div className="bg-blue-100 border-4 border-black p-4">
+                <p className="text-sm font-black text-blue-900 uppercase tracking-wider mb-2">
                   SECURITY STATUS
                 </p>
-                <p className="text-xs font-bold text-yellow-700 uppercase tracking-wide">
+                <p className="text-xs font-bold text-blue-700 uppercase tracking-wide">
                   ACCOUNT SECURE • LAST LOGIN: TODAY
                 </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Account Management & Logout */}
+          <div className="neo-card lg:col-span-2">
+            <div className="bg-red-600 text-white p-6 border-b-4 border-black">
+              <h3 className="text-2xl font-black uppercase tracking-wider flex items-center space-x-3">
+                <AlertTriangle className="h-6 w-6" />
+                <span>ACCOUNT MANAGEMENT</span>
+              </h3>
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-lg font-black text-gray-900 uppercase tracking-wider mb-2">
+                      CURRENT SESSION
+                    </p>
+                    <div className="bg-gray-100 border-4 border-black p-4">
+                      <p className="text-sm font-black text-gray-900 uppercase tracking-wider">
+                        LOGGED IN AS: {user?.role?.toUpperCase()}
+                      </p>
+                      <p className="text-xs font-bold text-gray-600 uppercase tracking-wide">
+                        {user?.name} ({user?.email})
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <p className="text-lg font-black text-gray-900 uppercase tracking-wider mb-2">
+                      SWITCH ACCOUNTS
+                    </p>
+                    <p className="text-sm font-bold text-gray-600 uppercase tracking-wide mb-4">
+                      LOG OUT TO SWITCH BETWEEN TEACHER AND STUDENT ACCOUNTS
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col justify-center space-y-4">
+                  <button
+                    onClick={handleLogout}
+                    className="neo-button-danger w-full py-4 text-xl flex items-center justify-center space-x-3"
+                  >
+                    <LogOut className="h-6 w-6" />
+                    <span>LOGOUT & SWITCH ACCOUNT</span>
+                  </button>
+                  
+                  <div className="bg-yellow-100 border-4 border-black p-4">
+                    <p className="text-xs font-black text-yellow-900 uppercase tracking-wider mb-1">
+                      ⚠️ WARNING
+                    </p>
+                    <p className="text-xs font-bold text-yellow-700 uppercase tracking-wide">
+                      LOGGING OUT WILL END YOUR CURRENT SESSION
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
