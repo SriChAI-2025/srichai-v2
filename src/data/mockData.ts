@@ -54,6 +54,8 @@ export interface MockAnswer {
   studentId: string;
   answerText?: string;
   answerImage?: string;
+  // NEW: support multiple answer pages
+  answerImages?: string[];
   score?: number;
   scoreGivenBy?: 'teacher' | 'ai';
   feedback?: string;
@@ -505,7 +507,34 @@ export const mockExams: MockExam[] = [
             questionCode: 'Q6C',
             promptText: 'Develop the notations of work and kinetic energy and show that it leads to the work-energy theorem. Also state the relation between kinetic energy and momentum of a body.',
             modelAnswer: 'Work: W = F·S cosθ.\nKinetic Energy: KE = ½ mv².\nWork-Energy Theorem: W = ΔKE = ½ m(v² - u²).\nRelation between KE and momentum: KE = p²/(2m).',
-            rubric: 'Definition of Work with formula — 1 mark\nDefinition of Kinetic Energy with formula — 1 mark\nDerivation / Proof of Work-Energy Theorem — 4 marks\nRelation between Kinetic Energy and Momentum — 2 marks',
+            rubric: `Section-C (LAQ’s = 8 Marks)
+19 (A). Work – The dot product of force vector and displacement vector is called work.
+
+$W = \\vec{F} \\cdot \\vec{S} = FS \\cos \\theta$
+(1 mark)
+
+
+Kinetic Energy – The kinetic energy of an object is a measure of the work an object can do by the virtue of its motion (or) the energy possessed by a body by virtue of its motion is called kinetic energy.
+
+$KE = \\frac{1}{2}mv^2$
+(1 mark)
+
+
+Work-Energy Theorem – The change in resultant energy (R.E) of a particle is equal to the work done on it by the net force.
+
+$v^2 - u^2 = 2as$
+$\\frac{1}{2}mv^2 - \\frac{1}{2}mu^2 = mas$
+$= F \\cdot S$
+$\\therefore KE_f - KE_i = W$
+(4 marks)
+
+
+(ii) Relation between Kinetic Energy and Momentum
+
+$KE = \\frac{p^2}{2m}$, where
+$m = \\text{mass}$,
+$p = \\text{momentum}$
+(2 marks)`,
             referenceMaterial: 'Physics Textbook Chapter 5, Work and Energy',
             exampleResponses: [
               { text: 'Good derivation but missing KE-momentum relation', score: 6 },
@@ -519,9 +548,85 @@ export const mockExams: MockExam[] = [
                 examId: 'exam1',
                 questionId: 'q1_c6',
                 studentId: 'PHYS001',
-                answerImage: '/work_energy_student_answer.jpg',
+                answerImages: ['/work_energy_student_answer.jpg'],
                 aiSuggestedScore: 6,
                 aiSuggestedFeedback: 'Excellent explanation and clarity for work, kinetic energy, and work-energy theorem. Missing relation between kinetic energy and momentum for full marks.',
+                createdAt: '2025-07-04T00:00:00Z'
+              }
+            ]
+          },
+          {
+            _id: 'q1_c7',
+            examId: 'exam1',
+            sectionId: 'section3',
+            questionCode: 'Q7C',
+            promptText: 'Show that the motion of a simple pendulum is simple harmonic for small angles and derive an expression for its time period. Define a seconds pendulum.',
+            modelAnswer: 'Starting from the restoring force F = -mg sin θ and applying the small-angle approximation (sin θ ≈ θ), one shows that the angular acceleration is proportional to −θ. Comparing with a = −ω²x gives ω² = g/l and hence T = 2π√(l/g). A seconds pendulum is one whose period is exactly 2 s, requiring l ≈ 1 m.',
+            rubric: `Simple Pendulum (7 Marks)
+Part 1 – Proof of SHM & derivation of T (6 marks total)
+• Setup & force equation (1)  
+• Small-angle approx + substitutions (3)  
+• Comparison with SHM, obtain ω² = g/l (1)  
+• Final period T = 2π√(l/g) (1)
+
+Part 2 – Seconds pendulum (2 marks)  
+• Defines period = 2 s (1)  
+• Gives length ≈ 1 m (1)`,
+            referenceMaterial: 'Physics Textbook Chapter 5, Oscillations',
+            exampleResponses: [
+              { text: 'Good derivation but missed length of seconds pendulum', score: 6 },
+              { text: 'Complete derivation and definition', score: 7 }
+            ],
+            maxScore: 8,
+            order: 6,
+            answers: [
+              {
+                _id: 'a_q1_c7_PHYS001',
+                examId: 'exam1',
+                questionId: 'q1_c7',
+                studentId: 'PHYS001',
+                answerImages: ['/pendulum_p1.jpg', '/pendulum_p2.jpg'],
+                aiSuggestedScore: 7,
+                aiSuggestedFeedback: 'Nearly perfect derivation; omitted length of seconds pendulum.',
+                createdAt: '2025-07-04T00:00:00Z'
+              }
+            ]
+          },
+          {
+            _id: 'q1_c8',
+            examId: 'exam1',
+            sectionId: 'section3',
+            questionCode: 'Q8C',
+            promptText: 'State the Second Law of Thermodynamics and explain how a heat engine differs from a refrigerator.',
+            modelAnswer: 'Kelvin-Planck: No engine can convert all absorbed heat into work. Clausius: Heat cannot flow from cold to hot without work. Heat engine absorbs Q₁ at T₁, does work W, rejects Q₂ at T₂; efficiency η = 1 − Q₂/Q₁ (<1). Refrigerator uses work W to remove Q₂ from T₂ and reject Q₁ to T₁; COP β = Q₂/W (>1).',
+            rubric: `Thermodynamics (8 Marks)
+Part 1 – Second Law (2)  
+• Kelvin–Planck statement (1)  
+• Clausius statement (1)
+
+Part 2 – Heat Engine (3)  
+• Concept & process (1)  
+• Efficiency formula η (2)
+
+Part 3 – Refrigerator (3)  
+• Concept & process (1)  
+• COP formula β (2)`,
+            referenceMaterial: 'Physics Textbook Chapter 10, Thermodynamics',
+            exampleResponses: [
+              { text: 'Correct engine efficiency but wrong COP', score: 4 },
+              { text: 'Both efficiency and COP derived', score: 7 }
+            ],
+            maxScore: 8,
+            order: 7,
+            answers: [
+              {
+                _id: 'a_q1_c8_PHYS001',
+                examId: 'exam1',
+                questionId: 'q1_c8',
+                studentId: 'PHYS001',
+                answerImages: ['/thermo_p1.jpg', '/thermo_p2.jpg'],
+                aiSuggestedScore: 4,
+                aiSuggestedFeedback: 'Good efficiency derivation; COP uses wrong heat term.',
                 createdAt: '2025-07-04T00:00:00Z'
               }
             ]
@@ -924,6 +1029,8 @@ export const createMockAnswer = (answerData: Partial<MockAnswer>): MockAnswer =>
     studentId: answerData.studentId || `student_${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`,
     answerText: answerData.answerText,
     answerImage: answerData.answerImage,
+    // NEW: support multiple answer pages
+    answerImages: answerData.answerImages,
     score: answerData.score,
     scoreGivenBy: answerData.scoreGivenBy,
     feedback: answerData.feedback,

@@ -42,9 +42,16 @@ const QuestionGrading: React.FC = () => {
   const [answers, setAnswers] = useState<MockAnswer[]>([]);
   const [loading, setLoading] = useState(true);
   const [scores, setScores] = useState<{ [answerId: string]: { score: number; feedback: string } }>({});
-  const [imageModal, setImageModal] = useState<{ isOpen: boolean; imageUrl: string; studentId: string }>({
+  // Extended image modal state to support multi-page answers
+  const [imageModal, setImageModal] = useState<{
+    isOpen: boolean;
+    imageUrls: string[];
+    index: number;
+    studentId: string;
+  }>({
     isOpen: false,
-    imageUrl: '',
+    imageUrls: [],
+    index: 0,
     studentId: ''
   });
   const [gradingModal, setGradingModal] = useState<{ isOpen: boolean; answerIndex: number }>({
@@ -242,12 +249,35 @@ const QuestionGrading: React.FC = () => {
     }
   };
 
-  const openImageModal = (imageUrl: string, studentId: string) => {
-    setImageModal({ isOpen: true, imageUrl, studentId });
+  // Utility: return all pages (images) available for an answer – keeps backward compatibility
+  const getAnswerPages = (answer: MockAnswer): string[] => {
+    // @ts-ignore – answerImages may be undefined on older answers
+    if (answer.answerImages && Array.isArray(answer.answerImages) && answer.answerImages.length) {
+      // @ts-ignore
+      return answer.answerImages as string[];
+    }
+    return answer.answerImage ? [answer.answerImage] : [];
+  };
+
+  // Open the full-screen image modal at a given page
+  const openImageModal = (imageUrls: string[], studentId: string, startIndex: number = 0) => {
+    setImageModal({ isOpen: true, imageUrls, index: startIndex, studentId });
   };
 
   const closeImageModal = () => {
-    setImageModal({ isOpen: false, imageUrl: '', studentId: '' });
+    setImageModal({ isOpen: false, imageUrls: [], index: 0, studentId: '' });
+  };
+
+  // Navigate between pages inside the image modal
+  const navigateImageModal = (direction: 'prev' | 'next') => {
+    setImageModal(prev => {
+      const total = prev.imageUrls.length;
+      if (total <= 1) return prev;
+      const newIndex = direction === 'prev'
+        ? (prev.index - 1 + total) % total
+        : (prev.index + 1) % total;
+      return { ...prev, index: newIndex };
+    });
   };
 
   const openGradingModal = (answerIndex: number) => {
@@ -502,10 +532,10 @@ const QuestionGrading: React.FC = () => {
                     Student Answer:
                   </h4>
                   <div className="relative group">
-                    {answer.answerImage ? (
+                    {getAnswerPages(answer).length ? (
                       <div className="relative">
                         <img
-                          src={answer.answerImage}
+                          src={getAnswerPages(answer)[0]}
                           alt={`Answer by ${answer.studentId}`}
                           className={`w-full h-48 object-cover rounded-lg ${isNeoBrutalism ? 'border-4 border-black' : 'border border-gray-200 shadow-sm'}`}
                         />
@@ -752,17 +782,35 @@ const QuestionGrading: React.FC = () => {
 
                 {/* Student Answer Image */}
                 <div className="flex-1 flex items-center justify-center">
-                  {answers[gradingModal.answerIndex]?.answerImage ? (
+                  {(() => {
+                    const pages = getAnswerPages(answers[gradingModal.answerIndex]);
+                    return pages.length ? (
                     <div className="relative w-full">
                       <img
-                        src={answers[gradingModal.answerIndex].answerImage}
+                        src={pages[0]}
                         alt={`Answer by ${answers[gradingModal.answerIndex].studentId}`}
                         className={`w-full max-h-[60vh] object-contain rounded-lg cursor-pointer hover:opacity-95 transition-opacity ${isNeoBrutalism ? 'border-4 border-black' : 'border border-gray-200 shadow-sm'}`}
-                        onClick={() => openImageModal(answers[gradingModal.answerIndex].answerImage!, answers[gradingModal.answerIndex].studentId)}
+                        onClick={() => openImageModal(pages, answers[gradingModal.answerIndex].studentId)}
                       />
                       <div className={`absolute top-3 right-3 bg-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity ${isNeoBrutalism ? 'border-2 border-black' : ''}`}>
                         <Maximize2 className="h-5 w-5 text-gray-600" />
                       </div>
+                      {pages.length > 1 && (
+                        <>
+                          <button
+                            className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-1 rounded-full"
+                            onClick={(e) => { e.stopPropagation(); openImageModal(pages, answers[gradingModal.answerIndex].studentId, 0); }}
+                          >
+                            <ChevronLeft className="h-5 w-5" />
+                          </button>
+                          <button
+                            className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-1 rounded-full"
+                            onClick={(e) => { e.stopPropagation(); openImageModal(pages, answers[gradingModal.answerIndex].studentId, 0); }}
+                          >
+                            <ChevronRight className="h-5 w-5" />
+                          </button>
+                        </>
+                      )}
                     </div>
                   ) : (
                     <div className={`w-full h-64 bg-gray-100 rounded-lg border-2 border-dashed flex items-center justify-center ${isNeoBrutalism ? 'border-black' : 'border-gray-300'}`}>
@@ -773,7 +821,7 @@ const QuestionGrading: React.FC = () => {
                         </p>
                       </div>
                     </div>
-                  )}
+                  );})()}
                 </div>
               </div>
 
@@ -902,12 +950,29 @@ const QuestionGrading: React.FC = () => {
                 <X className="h-6 w-6" />
               </button>
             </div>
-            <div className="p-6 h-full flex items-center justify-center">
+            <div className="p-6 h-full flex items-center justify-center relative">
               <img
-                src={imageModal.imageUrl}
+                src={imageModal.imageUrls[imageModal.index]}
                 alt={`Answer by ${imageModal.studentId}`}
                 className="max-w-full max-h-[80vh] object-contain mx-auto"
               />
+
+              {imageModal.imageUrls.length > 1 && (
+                <>
+                  <button
+                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full"
+                    onClick={() => navigateImageModal('prev')}
+                  >
+                    <ChevronLeft className="h-6 w-6" />
+                  </button>
+                  <button
+                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full"
+                    onClick={() => navigateImageModal('next')}
+                  >
+                    <ChevronRight className="h-6 w-6" />
+                  </button>
+                </>
+              )}
             </div>
             <div className={`absolute bottom-0 left-0 right-0 p-4 border-t ${isNeoBrutalism ? 'bg-gray-800 text-white border-black' : 'border-gray-200 bg-gray-50'}`}>
               <p className={`text-sm text-center ${isNeoBrutalism ? 'font-bold uppercase tracking-wide' : 'text-gray-600'}`}>
