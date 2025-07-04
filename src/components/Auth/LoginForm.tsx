@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { User, Lock, LogIn, Eye, EyeOff, GraduationCap, BookOpen } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTheme } from '../../contexts/ThemeContext';
 import toast from 'react-hot-toast';
 
 const LoginForm: React.FC = () => {
@@ -10,6 +11,9 @@ const LoginForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
+  const { theme } = useTheme();
+  
+  const isNeoBrutalism = theme === 'neo-brutalism';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,9 +33,9 @@ const LoginForm: React.FC = () => {
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="max-w-md w-full space-y-8">
         {/* Logo Header */}
-        <div className="neo-card-header p-4 transform text-center">
+        <div className={`p-4 transform text-center ${isNeoBrutalism ? 'neo-card-header' : 'bg-white rounded-lg shadow-md border border-gray-200'}`}>
           <div className="flex items-center justify-center space-x-3 mb-4">
-            <div className="bg-blue-600 neo-card p-2">
+            <div className={`bg-blue-600 p-2 ${isNeoBrutalism ? 'neo-card' : 'rounded-lg shadow-md'}`}>
               <img 
                 src="/e930ff2adec300925a5290708203751d.jpg" 
                 alt="SriChAI Logo" 
@@ -39,15 +43,15 @@ const LoginForm: React.FC = () => {
               />
             </div>
             <div>
-              <span className="text-3xl font-black text-black uppercase tracking-wider">SriChAI</span>
-              <p className="text-blue-600 text-sm font-bold uppercase tracking-wider">AI EXAM GRADING</p>
+              <span className={`text-3xl text-black uppercase tracking-wider ${isNeoBrutalism ? 'font-black' : 'font-bold'}`}>SriChAI</span>
+              <p className={`text-blue-600 text-sm uppercase tracking-wider ${isNeoBrutalism ? 'font-bold' : 'font-medium'}`}>AI EXAM GRADING</p>
             </div>
           </div>
         </div>
 
         {/* User Type Selection */}
-        <div className="neo-card p-6">
-          <h2 className="text-2xl font-black text-center text-gray-900 uppercase tracking-wider mb-6">
+        <div className={`p-6 ${isNeoBrutalism ? 'neo-card' : 'bg-white rounded-lg shadow-md border border-gray-200'}`}>
+          <h2 className={`text-2xl text-center text-gray-900 uppercase tracking-wider mb-6 ${isNeoBrutalism ? 'font-black' : 'font-bold'}`}>
             SELECT USER TYPE
           </h2>
           
@@ -55,47 +59,59 @@ const LoginForm: React.FC = () => {
             <button
               type="button"
               onClick={() => setUserType('teacher')}
-              className={`neo-card p-4 text-center transition-all duration-200 ${
-                userType === 'teacher' 
-                  ? 'bg-blue-600 text-white transform scale-105' 
-                  : 'bg-white text-gray-900 hover:bg-gray-50'
+              className={`p-4 text-center transition-all duration-200 ${
+                isNeoBrutalism 
+                  ? `neo-card ${userType === 'teacher' 
+                      ? 'bg-blue-600 text-white transform scale-105' 
+                      : 'bg-white text-gray-900 hover:bg-gray-50'
+                    }`
+                  : `rounded-lg border shadow-sm ${userType === 'teacher' 
+                      ? 'bg-blue-600 text-white border-blue-600 shadow-md' 
+                      : 'bg-white text-gray-900 border-gray-200 hover:bg-gray-50 hover:shadow-md'
+                    }`
               }`}
             >
               <GraduationCap className="h-8 w-8 mx-auto mb-2" />
-              <p className="font-black text-lg uppercase tracking-wider">Teacher</p>
-              <p className="text-xs font-bold uppercase tracking-wide opacity-75">Create & Grade</p>
+              <p className={`text-lg uppercase tracking-wider ${isNeoBrutalism ? 'font-black' : 'font-bold'}`}>Teacher</p>
+              <p className={`text-xs uppercase tracking-wide opacity-75 ${isNeoBrutalism ? 'font-bold' : 'font-medium'}`}>Create & Grade</p>
             </button>
             
             <button
               type="button"
               onClick={() => setUserType('student')}
-              className={`neo-card p-4 text-center transition-all duration-200 ${
-                userType === 'student' 
-                  ? 'bg-green-600 text-white transform scale-105' 
-                  : 'bg-white text-gray-900 hover:bg-gray-50'
+              className={`p-4 text-center transition-all duration-200 ${
+                isNeoBrutalism 
+                  ? `neo-card ${userType === 'student' 
+                      ? 'bg-green-600 text-white transform scale-105' 
+                      : 'bg-white text-gray-900 hover:bg-gray-50'
+                    }`
+                  : `rounded-lg border shadow-sm ${userType === 'student' 
+                      ? 'bg-green-600 text-white border-green-600 shadow-md' 
+                      : 'bg-white text-gray-900 border-gray-200 hover:bg-gray-50 hover:shadow-md'
+                    }`
               }`}
             >
               <BookOpen className="h-8 w-8 mx-auto mb-2" />
-              <p className="font-black text-lg uppercase tracking-wider">Student</p>
-              <p className="text-xs font-bold uppercase tracking-wide opacity-75">Take Exams</p>
+              <p className={`text-lg uppercase tracking-wider ${isNeoBrutalism ? 'font-black' : 'font-bold'}`}>Student</p>
+              <p className={`text-xs uppercase tracking-wide opacity-75 ${isNeoBrutalism ? 'font-bold' : 'font-medium'}`}>Take Exams</p>
             </button>
           </div>
         </div>
 
         {/* Login Form */}
-        <div className="neo-card p-6">
+        <div className={`p-6 ${isNeoBrutalism ? 'neo-card' : 'bg-white rounded-lg shadow-md border border-gray-200'}`}>
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-black text-gray-900 uppercase tracking-wider">
+            <h2 className={`text-2xl text-gray-900 uppercase tracking-wider ${isNeoBrutalism ? 'font-black' : 'font-bold'}`}>
               {userType === 'teacher' ? 'Teacher Login' : 'Student Login'}
             </h2>
-            <p className="text-sm font-bold text-gray-600 uppercase tracking-wide mt-2">
+            <p className={`text-sm text-gray-600 uppercase tracking-wide mt-2 ${isNeoBrutalism ? 'font-bold' : 'font-medium'}`}>
               Enter your credentials to continue
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-black text-gray-900 uppercase tracking-wider mb-2">
+              <label className={`block text-sm text-gray-900 uppercase tracking-wider mb-2 ${isNeoBrutalism ? 'font-black' : 'font-bold'}`}>
                 Email Address
               </label>
               <div className="relative">
@@ -107,14 +123,18 @@ const LoginForm: React.FC = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="neo-input block w-full pl-10 pr-3 py-3 text-lg font-bold placeholder-gray-600"
+                  className={`block w-full pl-10 pr-3 py-3 text-lg placeholder-gray-600 ${
+                    isNeoBrutalism 
+                      ? 'neo-input font-bold' 
+                      : 'border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium'
+                  }`}
                   placeholder={`${userType.toUpperCase()} EMAIL`}
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-black text-gray-900 uppercase tracking-wider mb-2">
+              <label className={`block text-sm text-gray-900 uppercase tracking-wider mb-2 ${isNeoBrutalism ? 'font-black' : 'font-bold'}`}>
                 Password
               </label>
               <div className="relative">
@@ -126,7 +146,11 @@ const LoginForm: React.FC = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="neo-input block w-full pl-10 pr-12 py-3 text-lg font-bold placeholder-gray-600"
+                  className={`block w-full pl-10 pr-12 py-3 text-lg placeholder-gray-600 ${
+                    isNeoBrutalism 
+                      ? 'neo-input font-bold' 
+                      : 'border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium'
+                  }`}
                   placeholder="PASSWORD"
                 />
                 <button
@@ -146,8 +170,14 @@ const LoginForm: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full neo-button py-3 px-4 text-lg font-bold flex items-center justify-center space-x-2 ${
-                userType === 'student' ? 'bg-green-600 hover:bg-green-700' : ''
+              className={`w-full py-3 px-4 text-lg font-bold flex items-center justify-center space-x-2 ${
+                isNeoBrutalism 
+                  ? `neo-button ${userType === 'student' ? 'bg-green-600 hover:bg-green-700' : ''}`
+                  : `rounded-lg shadow-md border transition-colors ${
+                      userType === 'student' 
+                        ? 'bg-green-600 hover:bg-green-700 text-white border-green-600' 
+                        : 'bg-blue-600 hover:bg-blue-700 text-white border-blue-600'
+                    }`
               }`}
             >
               {isLoading ? (
@@ -165,9 +195,9 @@ const LoginForm: React.FC = () => {
           </form>
 
           {/* Demo Credentials */}
-          <div className="mt-6 neo-card bg-gray-100 p-4">
-            <h3 className="text-sm font-black text-gray-900 uppercase tracking-wider mb-2">Demo Credentials:</h3>
-            <div className="space-y-2 text-xs font-bold text-gray-700 uppercase tracking-wide">
+          <div className={`mt-6 bg-gray-100 p-4 ${isNeoBrutalism ? 'neo-card' : 'rounded-lg border border-gray-300'}`}>
+            <h3 className={`text-sm text-gray-900 uppercase tracking-wider mb-2 ${isNeoBrutalism ? 'font-black' : 'font-bold'}`}>Demo Credentials:</h3>
+            <div className={`space-y-2 text-xs text-gray-700 uppercase tracking-wide ${isNeoBrutalism ? 'font-bold' : 'font-medium'}`}>
               <p>📧 Any valid email format</p>
               <p>🔒 Any password</p>
               <p>🎯 Just select your role above!</p>
