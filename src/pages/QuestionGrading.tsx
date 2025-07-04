@@ -638,8 +638,8 @@ const QuestionGrading: React.FC = () => {
 
       {/* Detailed Grading Modal */}
       {gradingModal.isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-75">
-          <div className={`relative w-full max-w-6xl max-h-full overflow-hidden ${isNeoBrutalism ? 'neo-card' : 'bg-white rounded-lg'}`}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 bg-black bg-opacity-75">
+          <div className={`relative w-[95vw] h-[95vh] overflow-hidden ${isNeoBrutalism ? 'neo-card' : 'bg-white rounded-lg'}`}>
             {/* Modal Header */}
             <div className={`flex items-center justify-between p-6 border-b ${isNeoBrutalism ? 'bg-blue-600 text-white border-black' : 'border-gray-200'}`}>
               <div className="flex items-center space-x-4">
@@ -697,7 +697,7 @@ const QuestionGrading: React.FC = () => {
             </div>
 
             {/* Three Column Layout */}
-            <div className="flex max-h-[85vh]">
+            <div className="flex max-h-[88vh]">
               {/* Left Column - Question & Rubric */}
               <div className={`w-1/3 p-6 border-r ${isNeoBrutalism ? 'border-black bg-gray-50' : 'border-gray-200 bg-gray-50'} overflow-y-auto`}>
                 {/* Question */}
