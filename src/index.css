@@ -390,6 +390,8 @@
   .theme-classic .neo-card.bg-blue-600 {
     border: 0;
     border-radius: 0.5rem;
+    background-color: #2563eb; /* Ensure blue background retains when marked active */
+    color: white; /* Ensure visible white text */
     box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
   }
 
@@ -397,6 +399,15 @@
     border: 0;
     border-radius: 0.5rem;
     box-shadow: 0 4px 14px 0 rgba(34, 197, 94, 0.39);
+  }
+
+  /* Added override to ensure answered Question Navigator buttons are visible in classic theme */
+  .theme-classic .neo-card.bg-blue-500 {
+    border: 0;
+    border-radius: 0.5rem;
+    background-color: #3b82f6; /* Tailwind blue-500 */
+    color: white;
+    box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
   }
 
   /* Classic Shadow utilities for new components */
