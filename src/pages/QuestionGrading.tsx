@@ -139,6 +139,20 @@ const QuestionGrading: React.FC = () => {
   const generateAIScore = (answer: MockAnswer) => {
     if (!question) return;
 
+    // Use predefined AI suggestion if available on the answer (demo override)
+    if ((answer as any).aiSuggestedScore !== undefined) {
+      const aiScore = (answer as any).aiSuggestedScore as number;
+      const feedbackOverride = (answer as any).aiSuggestedFeedback as string | undefined;
+
+      setScores(prev => ({
+        ...prev,
+        [answer._id]: { score: aiScore, feedback: feedbackOverride || '' }
+      }));
+
+      toast.success(`SriChAI suggested score: ${aiScore}/${sectionInfo.maxScore} for ${answer.studentId}`);
+      return;
+    }
+
     const maxScore = sectionInfo.maxScore;
     
     // Generate AI score that respects the section-based maximum score
@@ -717,47 +731,11 @@ const QuestionGrading: React.FC = () => {
                   </h4>
                   <div className={`p-4 rounded-lg ${isNeoBrutalism ? 'neo-badge bg-blue-600 text-white border-2 border-black' : 'bg-white border border-gray-200'}`}>
                     <div className="space-y-3 text-sm">
-                      <div>
-                        <span className={`font-semibold ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : ''}`}>
-                          dasd
-                        </span>
-                        <br />
-                        <span className={isNeoBrutalism ? 'font-bold' : 'text-gray-600'}>
-                          as
-                        </span>
-                      </div>
-                      <div>
-                        <span className={`font-semibold ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : ''}`}>
-                          asdasdos
-                        </span>
-                        <br />
-                        <span className={isNeoBrutalism ? 'font-bold' : 'text-gray-600'}>
-                          dasdas
-                        </span>
-                      </div>
-                      <div>
-                        <span className={`font-semibold ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : ''}`}>
-                          das → 1 mark
-                        </span>
-                        <br />
-                        <span className={isNeoBrutalism ? 'font-bold' : 'text-gray-600'}>
-                          dasdasdasdasdas
-                        </span>
-                      </div>
-                      <div>
-                        <span className={`font-semibold ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : ''}`}>
-                          dsfgdsfgsfg
-                        </span>
-                        <br />
-                        <span className={isNeoBrutalism ? 'font-bold' : 'text-gray-600'}>
-                          sdfsdfsdfs
-                        </span>
-                      </div>
-                      <div>
-                        <span className={`font-semibold ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : ''}`}>
-                          fdsfdssdf→ 2 marks
-                        </span>
-                      </div>
+                      {(question.rubric ? question.rubric.split('\n') : ['No rubric provided.']).map((line: string, idx: number) => (
+                        <div key={idx}>
+                          <span className={isNeoBrutalism ? 'font-bold' : 'text-gray-600'}>{line}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>

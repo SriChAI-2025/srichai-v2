@@ -36,6 +36,8 @@ export interface MockQuestion {
   promptImage?: string;
   modelAnswer: string;
   referenceMaterial?: string;
+  // Added rubric string for detailed scoring criteria
+  rubric?: string;
   exampleResponses: Array<{
     text: string;
     score: number;
@@ -56,6 +58,9 @@ export interface MockAnswer {
   scoreGivenBy?: 'teacher' | 'ai';
   feedback?: string;
   gradedAt?: string;
+  // Optional AI suggested score/feedback for demo grading
+  aiSuggestedScore?: number;
+  aiSuggestedFeedback?: string;
   createdAt: string;
 }
 
@@ -492,6 +497,34 @@ export const mockExams: MockExam[] = [
             maxScore: 10,
             order: 4,
             answers: []
+          },
+          {
+            _id: 'q1_c6',
+            examId: 'exam1',
+            sectionId: 'section3',
+            questionCode: 'Q6C',
+            promptText: 'Develop the notations of work and kinetic energy and show that it leads to the work-energy theorem. Also state the relation between kinetic energy and momentum of a body.',
+            modelAnswer: 'Work: W = F·S cosθ.\nKinetic Energy: KE = ½ mv².\nWork-Energy Theorem: W = ΔKE = ½ m(v² - u²).\nRelation between KE and momentum: KE = p²/(2m).',
+            rubric: 'Definition of Work with formula — 1 mark\nDefinition of Kinetic Energy with formula — 1 mark\nDerivation / Proof of Work-Energy Theorem — 4 marks\nRelation between Kinetic Energy and Momentum — 2 marks',
+            referenceMaterial: 'Physics Textbook Chapter 5, Work and Energy',
+            exampleResponses: [
+              { text: 'Good derivation but missing KE-momentum relation', score: 6 },
+              { text: 'Complete answer with all relations and derivations', score: 8 }
+            ],
+            maxScore: 8,
+            order: 5,
+            answers: [
+              {
+                _id: 'a_q1_c6_PHYS001',
+                examId: 'exam1',
+                questionId: 'q1_c6',
+                studentId: 'PHYS001',
+                answerImage: '/work_energy_student_answer.jpg',
+                aiSuggestedScore: 6,
+                aiSuggestedFeedback: 'Excellent explanation and clarity for work, kinetic energy, and work-energy theorem. Missing relation between kinetic energy and momentum for full marks.',
+                createdAt: '2025-07-04T00:00:00Z'
+              }
+            ]
           }
         ]
       }
@@ -798,7 +831,17 @@ const studentIds = generateStudentIds(12); // 12 students for better testing
 mockExams.forEach(exam => {
   exam.sections.forEach(section => {
     section.questions.forEach(question => {
-      question.answers = generateAnswersForQuestion(exam._id, question._id, studentIds, section._id);
+      // If the question already has manually added answers, keep them and optionally append generated ones.
+      if (!question.answers || question.answers.length === 0) {
+        // No pre-existing answers – generate full set
+        question.answers = generateAnswersForQuestion(exam._id, question._id, studentIds, section._id);
+      } else {
+        // Pre-existing answers present – generate additional unique answers and append
+        const existingStudentIds = new Set(question.answers.map(a => a.studentId));
+        const remainingIds = studentIds.filter(id => !existingStudentIds.has(id));
+        const generatedExtra = generateAnswersForQuestion(exam._id, question._id, remainingIds, section._id);
+        question.answers.push(...generatedExtra);
+      }
     });
   });
 });
@@ -885,6 +928,9 @@ export const createMockAnswer = (answerData: Partial<MockAnswer>): MockAnswer =>
     scoreGivenBy: answerData.scoreGivenBy,
     feedback: answerData.feedback,
     gradedAt: answerData.gradedAt,
+    // Optional AI suggested score/feedback for demo grading
+    aiSuggestedScore: answerData.aiSuggestedScore,
+    aiSuggestedFeedback: answerData.aiSuggestedFeedback,
     createdAt: answerData.createdAt || new Date().toISOString()
   };
   
