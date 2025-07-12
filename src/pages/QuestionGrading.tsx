@@ -17,14 +17,12 @@ import {
   Target,
   Award,
   Sparkles,
-  Plus,
-  ChevronLeft,
-  ChevronRight,
-  Maximize2
+  Plus
 } from 'lucide-react';
 import Layout from '../components/Layout/Layout';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
 import ScoreButtons from '../components/UI/ScoreButtons';
+import ZoomableImage from '../components/UI/ZoomableImage';
 import { mockExams, MockQuestion, MockAnswer, updateExamStats } from '../data/mockData';
 import toast from 'react-hot-toast';
 
@@ -43,18 +41,6 @@ const QuestionGrading: React.FC = () => {
   const [answers, setAnswers] = useState<MockAnswer[]>([]);
   const [loading, setLoading] = useState(true);
   const [scores, setScores] = useState<{ [answerId: string]: { score: number; feedback: string } }>({});
-  // Extended image modal state to support multi-page answers
-  const [imageModal, setImageModal] = useState<{
-    isOpen: boolean;
-    imageUrls: string[];
-    index: number;
-    studentId: string;
-  }>({
-    isOpen: false,
-    imageUrls: [],
-    index: 0,
-    studentId: ''
-  });
   const [gradingModal, setGradingModal] = useState<{ isOpen: boolean; answerIndex: number }>({
     isOpen: false,
     answerIndex: 0
@@ -260,26 +246,7 @@ const QuestionGrading: React.FC = () => {
     return answer.answerImage ? [answer.answerImage] : [];
   };
 
-  // Open the full-screen image modal at a given page
-  const openImageModal = (imageUrls: string[], studentId: string, startIndex: number = 0) => {
-    setImageModal({ isOpen: true, imageUrls, index: startIndex, studentId });
-  };
 
-  const closeImageModal = () => {
-    setImageModal({ isOpen: false, imageUrls: [], index: 0, studentId: '' });
-  };
-
-  // Navigate between pages inside the image modal
-  const navigateImageModal = (direction: 'prev' | 'next') => {
-    setImageModal(prev => {
-      const total = prev.imageUrls.length;
-      if (total <= 1) return prev;
-      const newIndex = direction === 'prev'
-        ? (prev.index - 1 + total) % total
-        : (prev.index + 1) % total;
-      return { ...prev, index: newIndex };
-    });
-  };
 
   const openGradingModal = (answerIndex: number) => {
     setGradingModal({ isOpen: true, answerIndex });
@@ -534,11 +501,12 @@ const QuestionGrading: React.FC = () => {
                   </h4>
                   <div className="relative group">
                     {getAnswerPages(answer).length ? (
-                      <div className="relative">
-                        <img
+                      <div className="relative h-48">
+                        <ZoomableImage
                           src={getAnswerPages(answer)[0]}
                           alt={`Answer by ${answer.studentId}`}
-                          className={`w-full h-48 object-cover rounded-lg ${isNeoBrutalism ? 'border-4 border-black' : 'border border-gray-200 shadow-sm'}`}
+                          isNeoBrutalism={isNeoBrutalism}
+                          className={`rounded-lg ${isNeoBrutalism ? 'border-4 border-black' : 'border border-gray-200 shadow-sm'}`}
                         />
                         <div 
                           className={`absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-10 rounded-lg cursor-pointer`}
@@ -776,32 +744,14 @@ const QuestionGrading: React.FC = () => {
                   {(() => {
                     const pages = getAnswerPages(answers[gradingModal.answerIndex]);
                     return pages.length ? (
-                    <div className="relative w-full">
-                      <img
+                    <div className="relative w-full h-[60vh] group">
+                      <ZoomableImage
                         src={pages[0]}
                         alt={`Answer by ${answers[gradingModal.answerIndex].studentId}`}
-                        className={`w-full max-h-[60vh] object-contain rounded-lg cursor-pointer hover:opacity-95 transition-opacity ${isNeoBrutalism ? 'border-4 border-black' : 'border border-gray-200 shadow-sm'}`}
-                        onClick={() => openImageModal(pages, answers[gradingModal.answerIndex].studentId)}
+                        isNeoBrutalism={isNeoBrutalism}
+                        className={`rounded-lg ${isNeoBrutalism ? 'border-4 border-black' : 'border border-gray-200 shadow-sm'}`}
                       />
-                      <div className={`absolute top-3 right-3 bg-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity ${isNeoBrutalism ? 'border-2 border-black' : ''}`}>
-                        <Maximize2 className="h-5 w-5 text-gray-600" />
-                      </div>
-                      {pages.length > 1 && (
-                        <>
-                          <button
-                            className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-1 rounded-full"
-                            onClick={(e) => { e.stopPropagation(); openImageModal(pages, answers[gradingModal.answerIndex].studentId, 0); }}
-                          >
-                            <ChevronLeft className="h-5 w-5" />
-                          </button>
-                          <button
-                            className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-1 rounded-full"
-                            onClick={(e) => { e.stopPropagation(); openImageModal(pages, answers[gradingModal.answerIndex].studentId, 0); }}
-                          >
-                            <ChevronRight className="h-5 w-5" />
-                          </button>
-                        </>
-                      )}
+
                     </div>
                   ) : (
                     <div className={`w-full h-64 bg-gray-100 rounded-lg border-2 border-dashed flex items-center justify-center ${isNeoBrutalism ? 'border-black' : 'border-gray-300'}`}>
@@ -916,61 +866,7 @@ const QuestionGrading: React.FC = () => {
         ></div>
       )}
 
-      {/* Image Modal - Rendered after grading modal to appear on top */}
-      {imageModal.isOpen && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-2 bg-black bg-opacity-90">
-          <div className={`relative w-[95vw] h-[95vh] overflow-hidden ${isNeoBrutalism ? 'neo-card' : 'bg-white rounded-lg'}`}>
-            <div className={`flex items-center justify-between p-4 border-b ${isNeoBrutalism ? 'bg-blue-600 text-white border-black' : 'border-gray-200'}`}>
-              <h3 className={`text-xl font-semibold ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : 'text-gray-900'}`}>
-                Answer by {imageModal.studentId}
-              </h3>
-              <button
-                onClick={closeImageModal}
-                className={isNeoBrutalism ? "neo-button-icon" : "p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors"}
-              >
-                <X className="h-6 w-6" />
-              </button>
-            </div>
-            <div className="p-6 h-full flex items-center justify-center relative">
-              <img
-                src={imageModal.imageUrls[imageModal.index]}
-                alt={`Answer by ${imageModal.studentId}`}
-                className="max-w-full max-h-[80vh] object-contain mx-auto"
-              />
 
-              {imageModal.imageUrls.length > 1 && (
-                <>
-                  <button
-                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full"
-                    onClick={() => navigateImageModal('prev')}
-                  >
-                    <ChevronLeft className="h-6 w-6" />
-                  </button>
-                  <button
-                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full"
-                    onClick={() => navigateImageModal('next')}
-                  >
-                    <ChevronRight className="h-6 w-6" />
-                  </button>
-                </>
-              )}
-            </div>
-            <div className={`absolute bottom-0 left-0 right-0 p-4 border-t ${isNeoBrutalism ? 'bg-gray-800 text-white border-black' : 'border-gray-200 bg-gray-50'}`}>
-              <p className={`text-sm text-center ${isNeoBrutalism ? 'font-bold uppercase tracking-wide' : 'text-gray-600'}`}>
-                Click outside the image or press the X button to close
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Click outside image modal to close */}
-      {imageModal.isOpen && (
-        <div 
-          className="fixed inset-0 z-[9998]" 
-          onClick={closeImageModal}
-        ></div>
-      )}
     </Layout>
   );
 };
