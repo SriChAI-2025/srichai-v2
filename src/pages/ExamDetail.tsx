@@ -18,11 +18,13 @@ import {
   Target,
   Award,
   Zap,
-  Eye
+  Eye,
+  Upload
 } from 'lucide-react';
 import Layout from '../components/Layout/Layout';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
-import { mockExams, MockExam, updateExamStats } from '../data/mockData';
+import UploadAnswerModal from '../components/UI/UploadAnswerModal';
+import { mockExams, MockExam, updateExamStats, MockAnswer } from '../data/mockData';
 import { useTheme } from '../contexts/ThemeContext';
 
 type DesignStyle = 'classic' | 'neo-brutalism';
@@ -34,6 +36,8 @@ const ExamDetail: React.FC = () => {
   const [exam, setExam] = useState<MockExam | null>(null);
   const [loading, setLoading] = useState(true);
   const [designStyle, setDesignStyle] = useState<DesignStyle>('neo-brutalism');
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState<{ id: string; text: string; number: number } | null>(null);
 
   useEffect(() => {
     fetchExam();
@@ -67,6 +71,67 @@ const ExamDetail: React.FC = () => {
     if (examIndex > -1) {
       mockExams[examIndex] = updatedExam;
       updateExamStats(exam._id);
+    }
+  };
+
+  const openUploadModal = (questionId: string, questionText: string, questionNumber: number) => {
+    setSelectedQuestion({ id: questionId, text: questionText, number: questionNumber });
+    setUploadModalOpen(true);
+  };
+
+  const closeUploadModal = () => {
+    setUploadModalOpen(false);
+    setSelectedQuestion(null);
+  };
+
+  const handleUploadAnswer = async (studentRollNumber: string, files: File[]) => {
+    if (!exam || !selectedQuestion) return;
+
+    try {
+      // Create URLs for uploaded files (in a real app, these would be uploaded to a server)
+      const uploadedFiles = files.map(file => ({
+        name: file.name,
+        url: URL.createObjectURL(file), // Temporary URL for demo
+        size: file.size
+      }));
+
+      // Create new answer
+      const newAnswer: MockAnswer = {
+        _id: `a_${selectedQuestion.id}_${studentRollNumber}_${Date.now()}`,
+        examId: exam._id,
+        questionId: selectedQuestion.id,
+        studentId: studentRollNumber,
+        answerImages: uploadedFiles.map(f => f.url),
+        answerText: `Uploaded files: ${uploadedFiles.map(f => f.name).join(', ')}`,
+        createdAt: new Date().toISOString()
+      };
+
+      // Update the exam with the new answer
+      const updatedSections = exam.sections.map(section => ({
+        ...section,
+        questions: section.questions.map(question => 
+          question._id === selectedQuestion.id
+            ? { ...question, answers: [...question.answers, newAnswer] }
+            : question
+        )
+      }));
+
+      const updatedExam = { ...exam, sections: updatedSections };
+      setExam(updatedExam);
+
+      // Update global mock data
+      const examIndex = mockExams.findIndex(e => e._id === exam._id);
+      if (examIndex > -1) {
+        mockExams[examIndex] = updatedExam;
+        updateExamStats(exam._id);
+      }
+
+      // Show success message
+      alert(`Answer uploaded successfully for student ${studentRollNumber}!`);
+      
+    } catch (error) {
+      console.error('Error uploading answer:', error);
+      alert('Error uploading answer. Please try again.');
     }
   };
 
@@ -419,6 +484,13 @@ const ExamDetail: React.FC = () => {
                         </div>
                         
                         <div className="ml-6 flex items-center space-x-2">
+                          <button
+                            onClick={() => openUploadModal(question._id, question.promptText, questionIndex + 1)}
+                            className={isNeoBrutalism ? 'neo-button-secondary text-sm' : 'inline-flex items-center px-3 py-1.5 border border-blue-300 shadow-sm text-xs font-medium rounded-md text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors'}
+                          >
+                            <Upload className="h-4 w-4 mr-1" />
+                            {isNeoBrutalism ? 'UPLOAD ANSWERS' : 'Upload Answers'}
+                          </button>
                           <Link
                             to={`/questions/${question._id}/grade`}
                             className={isNeoBrutalism ? 'neo-button-secondary text-sm' : 'inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors'}
@@ -471,6 +543,17 @@ const ExamDetail: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Upload Answer Modal */}
+      {selectedQuestion && (
+        <UploadAnswerModal
+          isOpen={uploadModalOpen}
+          onClose={closeUploadModal}
+          onUpload={handleUploadAnswer}
+          questionNumber={selectedQuestion.number}
+          questionText={selectedQuestion.text}
+        />
+      )}
     </Layout>
   );
 };

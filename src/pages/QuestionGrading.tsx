@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import Layout from '../components/Layout/Layout';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
+import ScoreButtons from '../components/UI/ScoreButtons';
 import { mockExams, MockQuestion, MockAnswer, updateExamStats } from '../data/mockData';
 import toast from 'react-hot-toast';
 
@@ -565,27 +566,17 @@ const QuestionGrading: React.FC = () => {
                 <div className={`border-t pt-4 ${isNeoBrutalism ? 'border-black' : 'border-gray-200'}`}>
                   <div className="space-y-3">
                     <div>
-                      <label className={`block text-xs font-medium mb-1 ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : 'text-gray-700'}`}>
-                        Score (0-{sectionInfo.maxScore})
-                      </label>
-                      <input
-                        type="number"
-                        min="0"
-                        max={sectionInfo.maxScore}
-                        value={scores[answer._id]?.score || ''}
-                        onChange={(e) => setScores(prev => ({
+                      <ScoreButtons
+                        sectionType={sectionInfo.type}
+                        currentScore={scores[answer._id]?.score}
+                        onScoreSelect={(score) => setScores(prev => ({
                           ...prev,
                           [answer._id]: {
                             ...prev[answer._id],
-                            score: parseInt(e.target.value) || 0
+                            score: score
                           }
                         }))}
-                        className={`w-full px-3 py-2 text-sm ${
-                          isNeoBrutalism 
-                            ? 'neo-input font-bold' 
-                            : 'border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
-                        }`}
-                        placeholder={isNeoBrutalism ? 'ENTER SCORE' : 'Enter score'}
+                        isNeoBrutalism={isNeoBrutalism}
                       />
                     </div>
                     
@@ -829,28 +820,18 @@ const QuestionGrading: React.FC = () => {
               <div className={`w-1/3 p-6 border-l ${isNeoBrutalism ? 'border-black bg-gray-50' : 'border-gray-200 bg-gray-50'} flex flex-col`}>
                 <div className="flex-1 space-y-4">
                   {/* Score Box */}
-                  <div className={`p-4 rounded-lg border-2 h-32 ${isNeoBrutalism ? 'border-black bg-white' : 'border-gray-300 bg-white'}`}>
-                    <label className={`block text-sm font-medium mb-2 ${isNeoBrutalism ? 'font-black uppercase tracking-wider' : 'text-gray-700'}`}>
-                      Score (0-{sectionInfo.maxScore})
-                    </label>
-                    <input
-                      type="number"
-                      min="0"
-                      max={sectionInfo.maxScore}
-                      value={scores[answers[gradingModal.answerIndex]?._id]?.score || ''}
-                      onChange={(e) => setScores(prev => ({
+                  <div className={`p-4 rounded-lg border-2 ${isNeoBrutalism ? 'border-black bg-white' : 'border-gray-300 bg-white'}`}>
+                    <ScoreButtons
+                      sectionType={sectionInfo.type}
+                      currentScore={scores[answers[gradingModal.answerIndex]?._id]?.score}
+                      onScoreSelect={(score) => setScores(prev => ({
                         ...prev,
                         [answers[gradingModal.answerIndex]._id]: {
                           ...prev[answers[gradingModal.answerIndex]._id],
-                          score: parseInt(e.target.value) || 0
+                          score: score
                         }
                       }))}
-                      className={`w-full px-3 py-2 text-lg ${
-                        isNeoBrutalism 
-                          ? 'neo-input font-bold' 
-                          : 'border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
-                      }`}
-                      placeholder={isNeoBrutalism ? 'ENTER SCORE' : 'Enter score'}
+                      isNeoBrutalism={isNeoBrutalism}
                     />
                   </div>
 
