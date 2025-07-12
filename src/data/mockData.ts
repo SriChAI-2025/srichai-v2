@@ -1000,6 +1000,8 @@ export const createMockExam = (examData: Partial<MockExam>): MockExam => {
   };
   
   mockExams.push(newExam);
+  console.log('Created exam:', newExam._id, 'Total exams:', mockExams.length);
+  console.log('Exam added to mockExams:', mockExams.map(e => ({ id: e._id, title: e.title })));
   return newExam;
 };
 
